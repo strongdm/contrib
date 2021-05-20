@@ -1,21 +1,13 @@
-# Garden Template
-The Garden Template contains sample files you could use for creating new [Code Garden](https://github.com/strongdm/garden) Repositories. It includes templates for:
-* [README](README-sample.md)
-* [License](LICENSE)
-* [Contributing](CONTRIBUTING.md)
-* [Support](SUPPORT.md)
-* Report [bug](.github/ISSUE_TEMPLATE/bug_report.md) or [feature requests](.github/ISSUE_TEMPLATE/feature_request.md)
-* [Pull Request](.github/PULL_REQUEST_TEMPLATE/pull_request_template.md)
-* [Documentation](docs)
+# strongDM Contrib
 
-In order to use this repository, you could:
-* Use it as a Template - Green button at the top of the repo
-* Clone it and manually adjust it - Useful if you want to start a fresh project history
+This repository provides sample code created by strongDM staff, customers, and others. This code may include shell scripts to use with the strongDM CLI, code snippets written for strongDM SDK's, Terraform templates, etc. Generally, this repo is organized by the task you are trying to accomplish (i.e. `authentication` for items related to SSO). So feel free to look around, we hope you find something helpful!
 
-After cloning the repo, remember to: 
-1. Remove this README file
-2. Rename the file README-sample.md to README.md and adjust the content
-3. Adjust the Contributing and Support guidelines
-4. Adjust the templates for bugs and feature requests under the .github folder 
+## Table of Contents
+* [Contributing](#contributing)
+* [Support](#support)
 
-A template repo that can be used as a reference: [Auth0 Open Source Template](https://github.com/auth0/open-source-template)
+## Contributing
+We welcome contributions from customers, enthusiasts, or anyone interested in strongDM! Please refer to the [contributing](CONTRIBUTING.md) page.
+
+## Support
+Code and scripts here are provided AS-IS and may or may not be updated in the future at our discretion. You should review and test any code thoroughly before deploying to production. For details on getting help, please see the [support](SUPPORT.md) guidelines.
