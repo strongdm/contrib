@@ -1,0 +1,10 @@
+---
+groups:
+  -
+    name: Support
+    resources:
+      - type:mysql
+  -
+    name: Engineering
+    resources:
+      - type:postgres
