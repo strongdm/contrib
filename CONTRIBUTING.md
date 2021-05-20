@@ -25,7 +25,7 @@ In case you want to contribute with code (fixes, new functionalities) or documen
 6. Push changes to your fork
 7. Open a PR in our repository and follow the PR template so that we can efficiently review the changes.
 
-Please consider the following rules when creating your PR (adapted from the [Auth0 Contributing Guidelines](https://github.com/auth0/open-source-template/blob/master/GENERAL-CONTRIBUTING.md)):
+Please consider the following rules when creating your PR:
 * Only fix/add the functionality in question OR address wide-spread whitespace/style issues, not both.
 * Add unit or integration tests for fixed or changed functionality (if a test suite already exists).
 * Address a single concern in the least number of changed lines as possible.
