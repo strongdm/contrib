@@ -1,4 +1,4 @@
-# Garden Contrib Support
+# strongDM Contrib Support
 
 Code and scripts here are provided AS-IS and may or may not be updated in the future at our discretion. You should review and test any code thoroughly before deploying to production.
 
