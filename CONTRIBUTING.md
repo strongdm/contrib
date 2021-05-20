@@ -1,6 +1,6 @@
-# Contributing to the project
+# Contributing to strongDM Contrib
 
-Thanks for considering contributing to our project!
+Thanks for considering contributing to our project! We welcome contributions from customers, enthusiasts, or anyone interested in strongDM!
 
 You can contribute in any of the following ways:
 * Submitting bugs or feature requests
