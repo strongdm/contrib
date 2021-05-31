@@ -70,13 +70,13 @@ def print_session_logs(session_id, start_time, user):
     for line in run_command(f"cat {session_id}.ssh"):
         elapsed_millis, cmd_entry = extract_cmd_entry_info(line)
         one_line_cmd_entry = cmd_entry.replace("\r", "").replace("\n", "|#|") 
-        full_cmd_entry = f"{full_cmd_entry}{one_line_cmd_entry}" # TODO Fix cmd_entry
+        full_cmd_entry = f"{full_cmd_entry}{one_line_cmd_entry}" 
         total_elapsed_millis += elapsed_millis
 
         if not end_of_line(cmd_entry):
             continue
   
-        end_time_regular = str(add_millis(start_time_regular, total_elapsed_millis))
+        end_time_regular = add_millis(start_time_regular, total_elapsed_millis)
         print(f"{session_id},{start_time_regular},{end_time_regular},{user},{full_cmd_entry}")
 
         full_cmd_entry = ""
@@ -94,6 +94,7 @@ def end_of_line(cmd_entry):
     return True if "\n" in cmd_entry else False
 
 def add_millis(input_date, input_millis):
-    return datetime.datetime.strptime(input_date, "%Y-%m-%d %H:%M:%S.%f") + datetime.timedelta(milliseconds = input_millis)
+    new_date = datetime.datetime.strptime(input_date, "%Y-%m-%d %H:%M:%S.%f") + datetime.timedelta(milliseconds = input_millis)
+    return str(new_date)
 
 main()
