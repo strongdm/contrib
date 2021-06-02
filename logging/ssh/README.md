@@ -5,13 +5,14 @@ This folder contains a shell/python script that can be used for extracting SSH f
 ## Requirements
 * Python3
 * SDM logs
+* A [strongDM admin token](https://www.strongdm.com/docs/admin-ui-guide/settings/admin-tokens/admin-tokens) with `SSH Replays` permission
 
 ## Configuration
-You can adjust the following variables at the top of the script:
-* LOG_DIR. Folder where the relay logs are located
-* LOG_PATTERN. Logs name pattern
-
-Ideally, configure the script as a CRONJOB. For example (daily config):
+1. You can adjust the following variables at the top of the script:
+* LOG_DIR. Folder where the relay logs are located (absolute path is recommended)
+* LOG_PATTERN. Logs name pattern (rarely requires any change)
+2. In your local runtime environment, set the token value above as an environment variable named `SDM_ADMIN_TOKEN`.
+3. Ideally, configure the script as a CRONJOB. For example (daily config):
 ```
 0 0 * * *
 ```
@@ -34,3 +35,4 @@ s1rWwpo8PrK5nJU9GnI5y3hDGYF9,2021-04-22 15:28:58.871968,2021-04-22 15:29:02.2329
 Considerations:
 * Commands with several lines are delimited by `|#|` 
 * SSH session files will be stored, and deleted in the next iteration, in the folder where the script gets executed
+* If you use the JSON format for local logging, change line 30 to `sdm ssh split $line --json  1>&2`
