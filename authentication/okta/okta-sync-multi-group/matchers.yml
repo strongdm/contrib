@@ -1,0 +1,14 @@
+---
+groups:
+  -
+    name: Other
+    resources:
+      - type:mysql
+  -
+    name: rodo-group-support
+    resources:
+      - type:mysql
+  -
+    name: rodo-group-engineering
+    resources:
+      - type:postgres
