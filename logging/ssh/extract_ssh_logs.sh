@@ -25,7 +25,7 @@ def main():
 
 def generate_ssh_session_files():
     ssh_split_cmd = f"""
-    rm *.ssh && \
+    rm *.ssh
     find {LOG_DIR} -name '{LOG_PATTERN}' | while read line; do 
       sdm ssh split $line 1>&2
     done
