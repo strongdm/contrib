@@ -231,7 +231,7 @@ func loadOktaUsers(ctx context.Context) (oktaUserList, error) {
 
 	var users []oktaUser
 	for _, u := range apiUsers {
-		login := (*u.Profile)["login"].(string)
+		profile := (*u.Profile)
 
 		groups, _, err := client.User.ListUserGroups(u.Id, nil)
 		if err != nil {
@@ -244,7 +244,9 @@ func loadOktaUsers(ctx context.Context) (oktaUserList, error) {
 		}
 
 		var u oktaUser
-		u.Login = login
+		u.Login = profile["login"].(string)
+		u.FirstName = profile["firstName"].(string)
+		u.LastName = profile["lastName"].(string)
 		u.Groups = groupNames
 		users = append(users, u)
 	}
