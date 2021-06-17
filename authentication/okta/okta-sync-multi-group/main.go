@@ -31,8 +31,9 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-// modify this Okta query filter with any valid Okta API parameters to control user creation in SDM
-var oktaQueryString = "profile.login sw \"rodolfo\" and (status eq \"ACTIVE\")"
+const OKTA_USERS_LIMIT = 500
+
+var oktaQueryString = "(status eq \"ACTIVE\")"
 
 var jsonFlag = flag.Bool("json", false, "dump a JSON report for debugging")
 var planFlag = flag.Bool("plan", false, "do not apply changes just plan and output the result")
@@ -222,7 +223,7 @@ func loadOktaUsers(ctx context.Context) (oktaUserList, error) {
 	if err != nil {
 		return nil, errors.Wrap(err, "invalid Okta configuration")
 	}
-	search := query.NewQueryParams(query.WithSearch(oktaQueryString))
+	search := query.NewQueryParams(query.WithSearch(oktaQueryString), query.WithLimit(OKTA_USERS_LIMIT))
 
 	apiUsers, _, err := client.User.ListUsers(search)
 	if err != nil {
@@ -344,6 +345,7 @@ func matchEntitlements(ctx context.Context, client *sdm.Client, matchers *Matche
 				return nil, err
 			}
 		}
+		result[matcher.Name] = make(entitlementList, 0) // for creating groups without available resources
 		for u := range uniq {
 			result[matcher.Name] = append(result[matcher.Name], u)
 		}
@@ -448,6 +450,10 @@ func syncUsers(ctx context.Context, client *sdm.Client, initialUsers userList, r
 func createMatchingUsers(ctx context.Context, client *sdm.Client, roles roleList, oktaUsers oktaUserList, matchers *MatcherConfig) (userList, error) {
 	matchingUsers := userList{}
 	for _, oktaUser := range oktaUsers {
+		if !oktaUserHasMatchingGroup(oktaUser, matchers) {
+			fmt.Fprintf(os.Stderr, "ignoring user %s - no group in matchers assigned to it\n", oktaUser.Login)
+			continue
+		}
 		user, err := loadOrCreateUser(ctx, client, oktaUser)
 		var alreadyExistsErr *sdm.AlreadyExistsError
 		if errors.As(err, &alreadyExistsErr) {
@@ -493,6 +499,17 @@ func createMatchingUsers(ctx context.Context, client *sdm.Client, roles roleList
 		})
 	}
 	return matchingUsers, nil
+}
+
+func oktaUserHasMatchingGroup(oktaUser oktaUser, matchers *MatcherConfig) bool {
+	for _, oktaGroup := range oktaUser.Groups {
+		for _, matcherGroup := range matchers.Groups {
+			if oktaGroup == matcherGroup.Name {
+				return true
+			}
+		}
+	}
+	return false
 }
 
 func loadOrCreateUser(ctx context.Context, client *sdm.Client, oktaUser oktaUser) (*sdm.User, error) {
