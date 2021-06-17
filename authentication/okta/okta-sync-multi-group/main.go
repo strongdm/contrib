@@ -33,7 +33,6 @@ import (
 
 const OKTA_USERS_LIMIT = 500
 
-// modify this Okta query filter with any valid Okta API parameters to control user creation in SDM
 var oktaQueryString = "(status eq \"ACTIVE\")"
 
 var jsonFlag = flag.Bool("json", false, "dump a JSON report for debugging")
