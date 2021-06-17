@@ -8,7 +8,7 @@ This script reads a separate JSON file, [matchers.yml](matchers.yml), which maps
 
 For each Group defined in the YML, an SDM Role will be created, and access to the defined resources will be granted to that Role, using the [filters spec](https://www.strongdm.com/docs/automation/getting-started/filters).
 
-Any user that matches the Okta search filter will be created in SDM (see the "oktaQueryString" definition just below). If they belong to an Okta Group that is defined in the YML, they will be assigned to the corresponding SDM Role. 
+Any user that matches the Okta search filter and has groups associated listed in [matchers.yml](matchers.yml) will be created in SDM, and assigned to the corresponding SDM Role. 
 
 strongDM only supports 1:1 user-role mappings, when there are multiple groups assigned to a okta user, a composite role is created with multiple sub-roles assigned to it.
 
@@ -20,8 +20,6 @@ The script won't remove any Roles or Users in SDM, unless you use the flags: `-d
 
   > For example, the sample file in this folder would create strongDM Roles with access to all `mysql` and `postgres` resources in your organization.
 
-3. Edit the variable `oktaQueryString` in the `GO` file to specify which users to sync to strongDM. (The Okta SDK does not provide a method to retrieve _group members_, unfortunately.)
-
 ## Sample
 ```
 $ go run . -delete-roles-not-in-okta -delete-users-not-in-okta
@@ -30,3 +28,4 @@ $ go run . -delete-roles-not-in-okta -delete-users-not-in-okta
 
 Considerations:
 * For better reporting add `-plan` to your command.
+* When using `-delete-users-not-in-okta​` remember to add your SDM admin emails to Okta, otherwise you could remove the account administrators.
