@@ -12,3 +12,7 @@ groups:
     name: rodo-group-engineering
     resources:
       - type:postgres
+  -
+    name: rodo-group-data
+    resources:
+      - type:athena
