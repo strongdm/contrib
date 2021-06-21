@@ -1,4 +1,4 @@
-# Synchronize Users from different Identity Providers with Multiple Groups
+# Synchronize Users from different Identity Providers 
 Shim go script for synchronizing users/groups from different Identity Providers (IdP) with strongDM. Current version supports Okta and Google Directory.
 
 Original version: https://github.com/strongdm/strongdm-sdk-go-examples/tree/master/contrib/okta-sync
@@ -46,7 +46,7 @@ $ go run . -okta -delete-unmatching-roles -delete-unmatching-users
 5 IdP users, 3 strongDM users in IdP, 3 strongDM roles in Idp
 ```
 
-Okta:
+Google:
 ```
 $ go run . -google -delete-unmatching-roles -delete-unmatching-users
 5 IdP users, 3 strongDM users in IdP, 3 strongDM roles in Idp
