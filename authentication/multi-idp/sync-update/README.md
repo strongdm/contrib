@@ -60,7 +60,7 @@ Considerations:
 2. Create credentials for a Desktop App: https://console.cloud.google.com/apis/credentials
 3. Enable Admin SDK API: https://console.cloud.google.com/apis/api/admin.googleapis.com/overview
 4. Administrate Users and OrgUnits: https://admin.google.com/u/2/ac/users
-  * A user can only be assigned to one OrgUnit
+  * A user can only be assigned to one OrgUnit at a time
 
 Considerations:
 * Reference: https://developers.google.com/admin-sdk/directory/v1/quickstart/go
