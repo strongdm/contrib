@@ -18,7 +18,7 @@ The script won't remove any Roles or Users in SDM, unless you use the flags: `-d
 1. Set the environment variables: SDM_API_ACCESS_KEY and SDM_API_SECRET_KEY. 
   * For Okta set OKTA_CLIENT_TOKEN and OKTA_CLIENT_ORGURL.
   * For Google set credentials.json 
-2. Edit the [matchers.yml](matchers.yml) file to a) define which groups to sync from Okta to strongDM as [Roles](https://www.strongdm.com/docs/admin-ui-guide/user-management/roles), and b) which strongDM resources users in those groups will receive access to.
+2. Edit the [matchers.yml](matchers.yml) file to a) define which groups to sync from the IdP to strongDM as [Roles](https://www.strongdm.com/docs/admin-ui-guide/user-management/roles), and b) which strongDM resources users in those groups will receive access to.
 
   > For example, the sample file in this folder would create strongDM Roles with access to all `mysql` and `postgres` resources in your organization.
 
