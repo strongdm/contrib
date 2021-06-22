@@ -131,7 +131,7 @@ func main() {
 	}
 	rpt.Matchers = matchers
 
-	idpUsers, err := loadIdpUsers(ctx, matchers) // TODO Calculate root!! and return error when multiple root
+	idpUsers, err := loadIdpUsers(ctx, matchers) 
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error loading users from IdP: %v\n", err)
 		os.Exit(1)
