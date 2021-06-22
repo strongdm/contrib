@@ -1,0 +1,20 @@
+---
+groups:
+  -
+    name: General
+    # Only one element can be root
+    root: true
+    resources:
+      - type:mysql
+  -
+    name: rodo-group-support
+    resources:
+      - type:mysql
+  -
+    name: rodo-group-engineering
+    resources:
+      - type:postgres
+  -
+    name: rodo-group-data
+    resources:
+      - type:athena
