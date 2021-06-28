@@ -18,6 +18,9 @@ import (
 	"google.golang.org/api/option"
 )
 
+// see https://developers.google.com/admin-sdk/directory/v1/limits
+const USERS_LIMIT = 500
+
 var googleHTTPClient *http.Client
 
 func ValidateGoogleEnv() error {

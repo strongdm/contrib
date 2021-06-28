@@ -2,3 +2,4 @@ set-env.sh
 credentials.json
 token.json
 __debug_bin
+.vscode/
