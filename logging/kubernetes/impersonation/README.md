@@ -4,7 +4,6 @@ This folder contains a Python script that helps with automation of roles for Kub
 
 ## Requirements
 * Python3
-* SDM logs
 * A [strongDM API key pair](https://www.strongdm.com/docs/admin-ui-guide/settings/admin-tokens/api-keys) with the following permissions:
   * Roles: List, Create
   * Grants: Write
