@@ -29,8 +29,6 @@ import (
 	"gopkg.in/yaml.v2"
 )
 
-const USERS_LIMIT = 500
-
 var jsonFlag = flag.Bool("json", false, "dump a JSON report for debugging")
 var planFlag = flag.Bool("plan", false, "do not apply changes just show initial queries")
 
@@ -131,7 +129,7 @@ func main() {
 	}
 	rpt.Matchers = matchers
 
-	idpUsers, err := loadIdpUsers(ctx, matchers) 
+	idpUsers, err := loadIdpUsers(ctx, matchers)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "error loading users from IdP: %v\n", err)
 		os.Exit(1)
