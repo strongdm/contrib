@@ -348,6 +348,9 @@ func matchEntitlements(ctx context.Context, client *sdm.Client, matchers *Matche
 			}
 			for resources.Next() {
 				rs := resources.Value()
+				if rs == nil { // check for beta resources not in the SDK
+					continue
+				}
 				uniq[entitlement{ResourceID: rs.GetID()}] = true
 			}
 			if resources.Err() != nil {
