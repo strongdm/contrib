@@ -8,13 +8,13 @@ secret_key=os.getenv("SDM_API_SECRET_KEY")
 client = strongdm.Client(access_key, secret_key)
 
 def get_role_details():
-    roleResponse = list(client.roles.list(""))
+    role_response = list(client.roles.list(""))
     print_border()
-    for r in roleResponse:
+    for r in role_response:
       print("Role name: \"" + r.name + "\" includes the following resources:")
-      rgResponse = client.role_grants.list('role_id:{id}'.format(id=r.id) )
+      rg_response = client.role_grants.list('role_id:{id}'.format(id=r.id) )
 
-      for g in rgResponse:
+      for g in rg_response:
         res = list(client.resources.list("id:{}".format(g.resource_id)))
         print("\t" + res[0].name)
       print_border()
