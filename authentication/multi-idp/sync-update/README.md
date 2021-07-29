@@ -34,6 +34,8 @@ $ go run . -help
     	use Google as IdP
   -json
     	dump a JSON report for debugging
+  -log
+    	include logging information
   -okta
     	use Okta as IdP
   -plan
