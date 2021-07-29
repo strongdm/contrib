@@ -1,10 +1,12 @@
 ---
+# Be mindful of proper YAML structure
 groups:
   -
     name: General
     # Only one element can be root
     root: true
     resources:
+      # Use valid SDM filters, see: https://www.strongdm.com/docs/automation/getting-started/filters
       - type:mysql
   -
     name: rodo-group-support
