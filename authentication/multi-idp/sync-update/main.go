@@ -24,6 +24,8 @@ import (
 	"strings"
 	"time"
 
+	log "github.com/sirupsen/logrus"
+
 	"github.com/pkg/errors"
 	sdm "github.com/strongdm/strongdm-sdk-go"
 	"gopkg.in/yaml.v2"
@@ -31,6 +33,7 @@ import (
 
 var jsonFlag = flag.Bool("json", false, "dump a JSON report for debugging")
 var planFlag = flag.Bool("plan", false, "do not apply changes just show initial queries")
+var logFlag = flag.Bool("log", false, "include logging information")
 
 // use carefully
 var deleteUnmatchingRolesFlag = flag.Bool("delete-unmatching-roles", false, "delete roles present in SDM but not in matchers.yml")
@@ -45,6 +48,10 @@ func init() {
 		fmt.Fprintf(os.Stderr, "You need to specify one Identity Provider (IdP): Okta or Google\n")
 		fmt.Fprintf(os.Stderr, "Use -okta or -google\n")
 		os.Exit(-1)
+	}
+	log.SetLevel(log.PanicLevel)
+	if *logFlag {
+		log.SetLevel(log.InfoLevel)
 	}
 }
 
@@ -120,6 +127,7 @@ func main() {
 
 	var rpt syncReport
 	rpt.Start = time.Now()
+	log.Info("Starting sync...")
 
 	matchers, err := loadMatchers()
 	if err != nil {
@@ -128,6 +136,7 @@ func main() {
 		return
 	}
 	rpt.Matchers = matchers
+	log.Infof("Loaded %d matchers", len(matchers.Groups))
 
 	idpUsers, err := loadIdpUsers(ctx, matchers)
 	if err != nil {
@@ -137,6 +146,7 @@ func main() {
 	}
 	rpt.IdPUsers = idpUsers
 	rpt.IdPUserCount = len(idpUsers)
+	log.Infof("Loaded %d users from IdP", rpt.IdPUserCount)
 
 	initialRoles, err := loadRoles(ctx, client)
 	if err != nil {
@@ -144,6 +154,7 @@ func main() {
 		os.Exit(1)
 		return
 	}
+	log.Infof("Loaded %d initial roles from SDM", len(initialRoles))
 
 	initialUsers, err := loadUsers(ctx, client)
 	if err != nil {
@@ -151,8 +162,10 @@ func main() {
 		os.Exit(1)
 		return
 	}
+	log.Infof("Loaded %d initial users from SDM", len(initialRoles))
 
 	if !*planFlag {
+		log.Info("Synchronizing users and roles")
 		matchingRoles, unmatchingRoles, err := syncRoles(ctx, client, initialRoles, matchers)
 		if err != nil {
 			fmt.Fprintf(os.Stderr, "error synchronizing roles: %v\n", err)
@@ -163,6 +176,8 @@ func main() {
 		rpt.SDMRoleInIdPCount = len(matchingRoles)
 		rpt.SDMRolesNotInIdP = unmatchingRoles
 		rpt.SDMRoleNotInIdPCount = len(unmatchingRoles)
+		log.Infof("%d SDM roles in IdP", rpt.SDMRoleInIdPCount)
+		log.Infof("%d SDM roles not in IdP", rpt.SDMRoleNotInIdPCount)
 
 		matchingUsers, unmatchingUsers, err := syncUsers(ctx, client, initialUsers, matchingRoles, idpUsers, matchers)
 		if err != nil {
@@ -174,6 +189,8 @@ func main() {
 		rpt.SDMUsersInIdPCount = len(matchingUsers)
 		rpt.SDMUsersNotInIdP = unmatchingUsers
 		rpt.SDMUserNotInIdPCount = len(unmatchingUsers)
+		log.Infof("%d SDM users in IdP", rpt.SDMRoleInIdPCount)
+		log.Infof("%d SDM users not in IdP", rpt.SDMRoleNotInIdPCount)
 	}
 
 	rpt.Complete = time.Now()
@@ -463,13 +480,13 @@ func createMatchingUsers(ctx context.Context, client *sdm.Client, roles roleList
 	matchingUsers := userList{}
 	for _, idpUser := range idpUsers {
 		if !idpUserHasMatchingGroup(idpUser, matchers) {
-			fmt.Fprintf(os.Stderr, "ignoring user %s - no group in matchers assigned to it\n", idpUser.Login)
+			log.Infof("ignoring user %s - no group in matchers assigned to it\n", idpUser.Login)
 			continue
 		}
 		user, err := loadOrCreateUser(ctx, client, idpUser)
 		var alreadyExistsErr *sdm.AlreadyExistsError
 		if errors.As(err, &alreadyExistsErr) {
-			fmt.Fprintf(os.Stderr, "ignoring user %s - might be assigned to a different org\n", idpUser.Login)
+			log.Infof("ignoring user %s - might be assigned to a different org\n", idpUser.Login)
 			continue
 		}
 		if err != nil {
