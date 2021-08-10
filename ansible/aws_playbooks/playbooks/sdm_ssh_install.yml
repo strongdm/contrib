@@ -1,0 +1,66 @@
+---
+- hosts: all
+  become: yes
+  name: SDM Remote SSH Self-Enroll
+  tasks:
+    - name: Install system updates for CentOS systems
+      yum:
+        name: '*'
+        state: latest
+        update_cache: yes
+        #cache_valid_time: 3600
+      when:
+        - ansible_os_family == "RedHat"
+        - ansible_distribution == "CentOS"
+    - name: Install system updates for Debian systems
+      apt:
+        name: '*'
+        state: latest
+        update_cache: yes
+        #cache_valid_time: 3600
+      when:
+        - ansible_os_family == "Debian"
+        - ansible_distribution == "Ubuntu"
+    - name: Install dependencies
+      package:
+        name: 
+          - unzip 
+          - curl 
+          - wget
+        state: present
+    - name: Download SDM Binary
+      command:
+        cmd: curl -J -O -L https://app.strongdm.com/releases/cli/linux
+    - name: Find SDM Zip
+      find:
+        paths: "./"
+        patterns: "sdmcli*.zip"
+      register: find_result
+    - name: Unpack SDM
+      command:
+        cmd: unzip "{{ item.path }}"
+      with_items: "{{ find_result.files }}"
+    - name: Login with SDM
+      shell: ./sdm login --admin-token='{{ SDM_ADMIN_TOKEN }}'
+      args:
+        executable: /bin/bash
+    - name: Get SDM Gateway Token And Install
+      shell: ./sdm admin ssh add -p `curl http://169.254.169.254/latest/meta-data/instance-id` $USER@`curl http://169.254.169.254/latest/meta-data/local-ipv4`| tee -a '/home/$USER/.ssh/authorized_keys'
+      args:
+        executable: /bin/bash    
+    - name: Unset SDM_ADMIN_TOKEN
+      set_fact:
+        SDM_ADMIN_TOKEN: 
+    - name: Remove SDM CLI
+      ansible.builtin.file:
+        path: "{{ item.path }}"
+        state: absent
+      with_items: "{{ find_result.files }}"
+    - name: Remove SDM 
+      ansible.builtin.file:
+        path: "./sdm"
+        state: absent
+    - name: Restart ssh service
+      ansible.builtin.service:
+        state: restarted
+        name: ssh
