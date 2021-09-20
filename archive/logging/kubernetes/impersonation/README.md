@@ -1,6 +1,6 @@
-### Important
+# ARCHIVED CONTENT
 
-This solution is designed to work with multiple access roles. If your strongDM organization has not yet been transitioned to this system, please refer to this [archived folder](../../archive/logging/kubernetes) to use the older code for Composite Roles.
+This solution was designed to work with roles and composite roles, and has been deprecated in favor of [this solution that works with the newer multi-role system](../../../logging/kubernetes/impersonation). If your strongDM organization has not yet been transitioned to this system, you may continue to use this script.
 
 # Convert SDM roles for Kubernetes User Impersonation
 
