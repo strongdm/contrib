@@ -5,9 +5,12 @@ import strongdm, time, os, argparse, sys, logging
 access_key = os.environ['SDM_API_ACCESS_KEY']
 secret_key = os.environ['SDM_API_SECRET_KEY']
 
+# Change INFO to ERROR if you don't care about success messages
 logging.basicConfig(level = logging.INFO)
 
 # In this multi-role version, both "r" and "m" keys/values are required
+# Add tags to make params required in argparse?
+
 parser = argparse.ArgumentParser()
 parser.add_argument("-r", "--role", help="SDM role name to convert",required=True)
 parser.add_argument("-m", "--map", help="SDM mapping role to add",required=True)
@@ -31,10 +34,10 @@ def transfer_users(role, id):
         k8s_attachment = strongdm.AccountAttachment(account_id=a.account_id, role_id=id)
         try:
           respGrant = client.account_attachments.create(k8s_attachment)
-          print("Role assignment succeeded")
+          logging.info('Role assignment to' + a.account_id + ' succeeded.')
         except Exception as ex:
-          print("Skipping role assignment because of error: " + str(ex))
-          raise ex
+          logging.info('Role assignment to ' + a.account_id + ' failed.')
+          logging.error("Role assignment role assignment because of error: " + str(ex))
 
 def get_k8s_role(role):
   k8s_role_id = ""
@@ -47,9 +50,9 @@ def main():
   my_id = get_k8s_role(args.map)
   try:
     transfer_users(args.role, my_id)
-    print("Copying users from Role " + args.role + " to Role "+ args.map + " succeeded.")
+    logging.info("Script execution is complete.")
   except Exception as ex:
-    print("Copying users from Role " + args.role + " to Role "+ args.map + " failed!")
+    logging.error("Script failed to complete, because of error: " + str(ex))
 
 if __name__ == "__main__":
     main()
