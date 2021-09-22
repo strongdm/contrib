@@ -4,6 +4,5 @@ Our users are resourceful and ambitious. The following is a list of automations 
 
 - [Bash script for SDM autocomplete](https://gist.github.com/yolabingo/7bc825d8ecfb455a56a2773ade5e8858). With this script, you can use SDM + Space, SSH + Space + Tab + Tab, and it pulls the hostnames from the SDM admin. Contributed by [dotCMS](https://dotcms.com/).
 - [Chef cookbook for automated SSH and gateway provisioning](https://supermarket.chef.io/cookbooks/strongdm), contributed by Applause
-- [Export Logs with Lifecycle Hooks](https://www.strongdm.com/docs/automation/contributed/export-logs-lifecycle-hooks), contributed by John Turner
 - [Importing strongDM logs into an ELK stack](https://borgified.github.io/posts/2018-01-01-sdm-in-elk.html), contributed by an anonymous strongDM user
 - [GitHub Action to configure kubectl with strongDM](https://github.com/marketplace/actions/configure-kubectl-with-strongdm), contributed by [Software.com](https://www.software.com/)
