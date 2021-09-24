@@ -8,6 +8,7 @@ This folder contains a Python script that lists all users, with their Role(s) an
   * Roles: List
   * Datasources: List
   * Users: List
+  * Grants: List
 
 ## Usage
 * Run `pip install strongdm`
