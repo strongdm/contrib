@@ -18,4 +18,4 @@ This folder contains a Python script that lists all users, with their Role(s) an
 * It will attempt to open the file using the default application defined on your system. 
 
 ## Notes
-* This script does not list permanent or temporary direct grants -- though it could be modified to do so!.
+* This script does not list permanent or temporary direct grants -- though it could be modified to do so!
