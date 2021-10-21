@@ -1,3 +1,17 @@
 terraform/resources/.DS_Store
 terraform/.DS_Store
 .DS_Store
+.envrc
+terraform.tfvars
+*.tfvars
+.sass-cache/
+.jekyll-metadata
+*.DS_Store
+package.json
+.aws-creds
+.aws-creds-dev
+.aws-creds-prod
+.vscode/settings.json
+projects/.DS_Store
+.gitignore
+*tfstate*
