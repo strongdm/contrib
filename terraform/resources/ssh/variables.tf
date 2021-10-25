@@ -1,7 +1,11 @@
 variable "aws_region" {
-   default = "us-west-2"
-}
-variable "instanceName" {
-   default = "your-instance-name"
+  default = "us-west-2"
 }
 
+variable "instanceName" {
+  default = "your-instance-name"
+}
+
+variable "sgName" {
+  default = "your-sg-name"
+}
