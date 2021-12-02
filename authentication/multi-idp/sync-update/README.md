@@ -1,4 +1,7 @@
 # Synchronize Users from different Identity Providers 
+
+🚧 _This script is written for legacy strongDM organizations, and will not work properly with the new Access Overhaul features. If you are unsure whether your organization is enabled for Access Overhaul, please contact your strongDM Account Manager, or write to support@strongdm.com_
+
 Shim go script for synchronizing users/groups from different Identity Providers (IdP) with strongDM. Current version supports Okta and Google Directory.
 
 Original version: https://github.com/strongdm/strongdm-sdk-go-examples/tree/master/contrib/okta-sync
