@@ -10,9 +10,11 @@ This is a small demo script showing how to add resources into strongDM if you ar
 
 4. You'll need to edit/create the `terraform.tfvars` file with your required variables. To generate an API key log in to the [strongDM admin UI](https://app.strongdm.com/) and generate a new API Key. You can see this docs page for instructions on how to [generate an API Key](https://www.strongdm.com/docs/admin-ui-guide/access/api-keys). File contentes example below:
 
-    >sdm_access_key = "YOURSDMAPIACCESSKEY"
-    >sdm_secret_key = "YOURSDMAPISECRETKEY"
-    >region         = "us-west-1"
+    ```HCL
+    sdm_access_key = "YOURSDMAPIACCESSKEY"
+    sdm_secret_key = "YOURSDMAPISECRETKEY"
+    region         = "us-west-1"
+    ```
 
 5. Run `terraform plan` to verify all the changes and any errors.
 
