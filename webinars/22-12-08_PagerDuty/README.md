@@ -19,5 +19,5 @@ To get this script working in your environment, you'll need the following:
 #### Notes:
 - In order for this automation to work, your users will need to be identified by the same email addresses in PagerDuty and in strongDM.
 
-_This script was presented in a strongDM webinar on 8 December 2021._
+_This script was presented in a strongDM webinar on 8 December 2021. You can view the recording on-demand via [this link](https://strongdm.zoom.us/rec/share/1CMvoeTMCLwLZaaqHWymvHVy28IRlQIxZjCbPocUweSbKcZmfhG9gcouKihgNK3c.aomQI3rl1mSuC5gG?startTime=1638986428000)._
 
