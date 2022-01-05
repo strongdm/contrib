@@ -287,11 +287,6 @@ resource "sdm_resource" "psql_admin" {
   }
 }
 
-resource "sdm_role_grant" "admin_grant_psql_admin" {
-  role_id     = sdm_role.admins.id
-  resource_id = sdm_resource.psql_admin.id
-}
-
 resource "sdm_resource" "psql_ssh" {
   ssh_cert {
     name     = "sdm-psql-ssh"
@@ -300,30 +295,6 @@ resource "sdm_resource" "psql_ssh" {
     port     = 22
     tags     = merge(local.required_tags, var.resource_tags)
   }
-}
-
-resource "sdm_role_grant" "admin_grant_psql_ssh" {
-  role_id     = sdm_role.admins.id
-  resource_id = sdm_resource.psql_ssh.id
-}
-
-# SDM Roles
-
-resource "sdm_role" "admins" {
-  name = "sdm-admin-role"
-}
-resource "sdm_account" "admin_users" {
-  count = length(var.admin_users)
-  user {
-    first_name = split("@", var.admin_users[count.index])[0]
-    last_name  = "Onboarding"
-    email      = var.admin_users[count.index]
-  }
-}
-resource "sdm_account_attachment" "admin_attachment" {
-  count      = length(var.admin_users)
-  account_id = sdm_account.admin_users[count.index].id
-  role_id    = sdm_role.admins.id
 }
 
 # SDM Public Key
