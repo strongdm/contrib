@@ -34,14 +34,8 @@ variable "resource_tags" {
   type = map(string)
   default = {
     Terraform = "true"
-    Creator   = "John T."
+    env = "dev"
   }
-}
-
-variable "admin_users" {
-  type        = list(string)
-  default     = []
-  description = "A list of email addresses that will be granted access to all resources."
 }
 
 variable "psql_sg_ingress_rules" {
@@ -106,44 +100,6 @@ variable "gateway_sg_ingress_rules" {
 
 }
 
-variable "vault_sg_ingress_rules" {
-
-  type = list(object({
-
-    from_port   = number
-    to_port     = number
-    protocol    = string
-    cidr_block  = string
-    description = string
-
-  }))
-
-  default = [
-    {
-      from_port   = 8200
-      to_port     = 8201
-      protocol    = "tcp"
-      cidr_block  = "10.0.2.0/24"
-      description = "vault"
-    },
-    {
-      from_port   = 22
-      to_port     = 22
-      protocol    = "tcp"
-      cidr_block  = "10.0.2.0/24"
-      description = "ssh"
-    },
-    {
-      from_port   = 8500
-      to_port     = 8501
-      protocol    = "tcp"
-      cidr_block  = "10.0.2.0/24"
-      description = "consul"
-    }
-  ]
-
-}
-
 variable "key_name" {
-  default = "jturner-terraform-key"
+  default = "dev-ssh-terraform-key"
 }
