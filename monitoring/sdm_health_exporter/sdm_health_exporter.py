@@ -51,8 +51,8 @@ def get_sdm_keys():
     """
 
     try:
-        api_id = os.environ['SDM_API_ID']
-        api_secret = os.environ['SDM_API_SECRET']
+        api_id = os.environ['SDM_API_ACCESS_KEY']
+        api_secret = os.environ['SDM_API_SECRET_KEY']
     except KeyError as ke:
         print(f'FATAL: Missing env variable: {ke}. Exiting...')
         exit()
@@ -68,7 +68,7 @@ def get_sdm_resources(client, alert_tag, sdm_objects):
     """
 
     # prometheus labels that will be attached to the exported metric
-    labels = ['id','name','tags','task']
+    labels = ['id','healthy','name','tags','task']
 
     for resource in client.resources.list(''):
         
@@ -91,6 +91,7 @@ def get_sdm_resources(client, alert_tag, sdm_objects):
         # set the metric to 0 (healthy) or 1 (unhealthy)
         sdm_objects[resource_name].health_metric.labels(
             id=resource.id,
+            healthy=resource.healthy,
             name=resource_name,                       
             tags=resource.tags,
             task='health_check'
@@ -107,7 +108,7 @@ def get_sdm_nodes(client, alert_tag, sdm_objects):
     """
 
     # prometheus labels that will be attached to the exported metric
-    labels = ['id','name','tags','task']
+    labels = ['id','name','state','tags','task']
 
     for node in client.nodes.list(''):
         
@@ -125,19 +126,19 @@ def get_sdm_nodes(client, alert_tag, sdm_objects):
             health_metric = Gauge(node_name, 'health of resource', labelnames=labels)
             sdm_objects[node_name] = SdmObject(health_metric=health_metric)
 
-        # node health is returned as "started" or "stopped"
-        # make sure that the "state" value we received is expected
-        if node.state not in ("started", "stopped"):
-            raise ValueError(f'Received unexpected state: {node.state}')
+        # node health is returned as "started", "stopped", or "new"
+        # anything other than "stated" is considered unhealthy
+        if node.state not in "started":
 
-        # set the label values based on information retrieved from the API call
-        # set the metric to 0 (healthy) or 1 (unhealthy)
-        sdm_objects[node_name].health_metric.labels(
-            id=node.id,
-            name=node_name,
-            tags=node.tags,
-            task='health_check'
-        ).set(0 if node.state == "started" else 1)
+            # set the label values based on information retrieved from the API call
+            # set the metric to 0 (healthy) or 1 (unhealthy)
+            sdm_objects[node_name].health_metric.labels(
+                id=node.id,
+                name=node_name,
+                state=node.state,
+                tags=node.tags,
+                task='health_check'
+            ).set(0 if node.state == "started" else 1)
 
     return sdm_objects
 
