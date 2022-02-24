@@ -1,0 +1,8 @@
+googleapis-common-protos==1.52.0
+grpcio==1.42.0
+prometheus-client==0.13.1
+protobuf==3.19.4
+pydantic==1.9.0
+six==1.16.0
+strongdm==1.0.35
+typing-extensions==4.1.0
