@@ -7,6 +7,7 @@ This folder contains a Python script that lists all Roles and the Resources link
 * A [strongDM API key pair](https://www.strongdm.com/docs/admin-ui-guide/settings/admin-tokens/api-keys) with the following permissions:
   * Roles: List
   * Datasources: List
+  * Grants: Read
 
 ## Usage
 * Run `pip install strongdm`
