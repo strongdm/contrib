@@ -16,6 +16,8 @@ The user interested in getting access to a resource, needs to create an issue wi
 
 ## Run
 
+### Running locally
+
 You need to define the following variables:
 ```
 JIRA_USER=<jira-user> # Usually an email address
@@ -29,4 +31,14 @@ SDM_ADMINS=<sdm-admins> # A list of email addresses separated by spaces
 After installing all the dependencies listed in [requirements.txt](requirements.txt), start the server:
 ```
 python3 server.py
+```
+
+### Running with Docker
+
+Create a file called `env-file` using [env-file.example](env-file.example) as an example and configure the environment variables necessary for the proper execution of Jira Webhook.
+
+After that, to create and run a container with the application, run:
+
+```
+docker-compose up --build
 ```
