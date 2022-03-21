@@ -1,0 +1,9 @@
+JIRA_USER=<jira-user> # Usually an email address
+JIRA_TOKEN=<jira-token> # Token generated in the first step of the configuration section
+JIRA_BASE_URL=https://<domain-id>.atlassian.net # URL defined during Jira Software registration
+
+SDM_API_ACCESS_KEY=<sdm-api-access-key>
+SDM_API_SECRET_KEY=<sdm-api-secret-key>
+SDM_ADMINS=<sdm-admins> # A list of email addresses separated by spaces
+
+NGROK_AUTH_TOKEN=<authtoken> # Token generated when creating an account on the ngrok.com website
