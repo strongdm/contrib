@@ -1,0 +1,14 @@
+{
+    "allowDeprecatedKeyExchanges": "",
+    "hostname": "192.168.101.192",
+    "name": "Example SSH Customer Key",
+    "port": "22",
+    "portForwarding": "",
+    "privateKey": "-----BEGIN RSA PRIVATE KEY-----MIICXAIBAAKBgQCTUmgeG1oqYI6Gn+4ZGS642x9AvxRA5nrM3mLSg38xEuYJ8CZciBEU+wx76umeB4TPK76f8UiLdvC1hvvolix7/dCvQI7wP++LN+C9lTt8vBOlxbscbsdMIOEtbgRA4dNGDsvCUZ9eD+qsaTC697r3x6Vw2zBFUQuypK3TweZeUQIDAQABAoGAS9X30sexum7J73MUVccoze++Ps4d1urN+/feVw9pwhFAaY09shQ49tvkqUVbzQWB0ENsdVj3RxOLBWbe9fOYIczkZFFvgac4xUo2EH3403es+4dZqDw3atvh82gGlORln+iu0JFzaeR14bw1zZpcLZhUzRCMJm/3Ojj92OHCNKECQQD70uyxmwPA/2Zx8l6Qysg2IrbQTqcTk8QDdPHAsRWtfO6iE+JpSbjPZOayqGyhWOeqxicfdF49v4Fh1Tn9X9NDAkEAlcPWLuLH9ciHVpHVbOgLJdbOJOrp3lSQKfPbcSZE6+Umz72SUop+4uoiVeQUqjSYD73MNkqht5ZribCzwMyM2wJAf1rUyZ2T8G856DajDKcBSh+URRUB+iyo3PavrLviMrMUHHPh9U2LYZet9HypM5A62WsNLiMz5haL4GZtxW5I8QJADSfn37SCNkAIS32CDxAPMqK89xc/tg0doOHQDA99jG9TynnvqZqK7On+XCct/YmjNfbJQpepvxPSnITONYiCcwJBALIEgh15XC6+5pBbQPXTi9JsoLzuvNyuvRO+mAayzGnP8W9h6fhDvUx2QSoz0t2IAJdhITC99m8WDQckvO7eFK0=-----END RSA PRIVATE KEY-----",
+    "type": "ssh-customer-key",
+    "username": "username-example",
+    "tags": {
+        "key1": "value1",
+        "key2": "value2"
+    }
+}

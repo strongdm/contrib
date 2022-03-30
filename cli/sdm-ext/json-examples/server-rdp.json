@@ -1,0 +1,13 @@
+{
+    "name": "Example RDP",
+    "hostname": "192.168.101.192",
+    "port": "3389",
+    "portOverride": "13391",
+    "type": "rdp",
+    "username": "username-example",
+    "password": "123",
+    "tags": {
+        "key1": "value1",
+        "key2": "value2"
+    }
+}

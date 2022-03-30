@@ -1,0 +1,11 @@
+{
+    "name": "Example Raw TCP",
+    "hostname": "192.168.101.192",
+    "port": "49150",
+    "portOverride": "13392",
+    "type": "rawtcp",
+    "tags": {
+        "key1": "value1",
+        "key2": "value2"
+    }
+}

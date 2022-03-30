@@ -1,0 +1,13 @@
+{
+    "allowDeprecatedKeyExchanges": "",
+    "hostname": "192.168.101.192",
+    "name": "Example SSH Cert",
+    "port": "22",
+    "portForwarding": "",
+    "type": "sshCert",
+    "username": "username-example",
+    "tags": {
+        "key1": "value1",
+        "key2": "value2"
+    }
+}
