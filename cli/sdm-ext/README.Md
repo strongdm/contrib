@@ -33,10 +33,15 @@ You can use the following sdm-ext flags:
 ## Exclusive SDM-EXT CLI Commands
 
 - `sdm-ext admin servers add --file ./json-examples/server-list.json`
+  - It registers a list of servers in the strongDM app from a JSON file. 
 - `sdm-ext admin servers add --f ./json-examples/server-list.json`
+  - It also registers a list of servers in the strongDM app from a JSON file.
 - `sdm-ext admin servers add --stdin`
+  - It registers a list of servers in the strongDM app from a user input in JSON format.
 - `sdm-ext admin servers add -i`
+  - It also registers a list of servers in the strongDM app from a user input in JSON format.
 
 ## SDM CLI commands executed with the SDM-EXT CLI
 
 - `sdm-ext admin servers list`
+  - This uses the original SDM CLI to list all servers registered in the strongDM app.
