@@ -10,17 +10,18 @@ import (
 )
 
 func TestExecuteWithSdm(t *testing.T) {
-	monkey.UnpatchAll()
 	tests := executeWithSdmTests{}
 	t.Run("TestExecuteWithSdm when command is successful",
 		tests.testWhenSdmCommandIsSuccessful)
-	t.Run("TestExecuteWithSdm when command is failed",
-		tests.testWhenSdmCommandIsFailed)
+	t.Run("TestExecuteWithSdm when command fails",
+		tests.testWhenSdmCommandFails)
 }
 
 type executeWithSdmTests struct{}
 
 func (tests executeWithSdmTests) testWhenSdmCommandIsSuccessful(t *testing.T) {
+	defer monkey.UnpatchAll()
+
 	monkey.Patch(runCommand, runSuccessfulCommandMock)
 
 	actualStdout, actualStderr := executeWithSdm()
@@ -34,7 +35,9 @@ func (tests executeWithSdmTests) testWhenSdmCommandIsSuccessful(t *testing.T) {
 	assert.Equal(t, expectedStderr, actualStderr)
 }
 
-func (tests executeWithSdmTests) testWhenSdmCommandIsFailed(t *testing.T) {
+func (tests executeWithSdmTests) testWhenSdmCommandFails(t *testing.T) {
+	defer monkey.UnpatchAll()
+
 	monkey.Patch(runCommand, runFailedCommandMock)
 
 	actualStdout, actualStderr := executeWithSdm()

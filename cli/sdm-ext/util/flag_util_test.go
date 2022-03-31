@@ -3,13 +3,10 @@ package util
 import (
 	"testing"
 
-	"bou.ke/monkey"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestFindFlag(t *testing.T) {
-	defer monkey.UnpatchAll()
-
 	tests := findFlagTests{}
 	t.Run("TestFindFlag when find flag is successful",
 		tests.testWhenFindFlagIsSuccessful)

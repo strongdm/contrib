@@ -5,19 +5,11 @@ import (
 	"fmt"
 	"io/ioutil"
 	"os"
-	"path/filepath"
 	"regexp"
-	"runtime"
 	"strings"
 
 	"github.com/urfave/cli"
 )
-
-func GetBasePath() string {
-	_, file, _, _ := runtime.Caller(0)
-	basepath := filepath.Join(filepath.Dir(file), "../")
-	return basepath
-}
 
 func MapCommandArguments(arguments []string, flags []cli.Flag) map[string]string {
 	argsMapping := map[string]string{}

@@ -16,6 +16,14 @@ func TestAdminServersAddAction(t *testing.T) {
 		tests.testWhenThePassedCommandIsValid)
 	t.Run("Test adminServersAddAction when there is no arguments",
 		tests.testWhenThereIsNoArguments)
+	t.Run("Test adminServersAddAction when the passed flag does not exist in sdm-ext cli",
+		tests.testWhenThePassedFlagDoesNotExistInSdmExtCli)
+	t.Run("Test adminServersAddAction when a subcommand is passed between add command and flag",
+		tests.testWhenASubcommandIsPassedBetweenAddCommandAndFlag)
+	t.Run("Test adminServersAddAction when a subcommand is passed after flag value",
+		tests.testWhenTheSubcommandIsPassedAfterFlagValue)
+	t.Run("Test adminServersAddAction when a subcommand is passed after flag",
+		tests.testWhenTheSubcommandIsPassedAfterFlag)
 }
 
 type adminServersAddActionTests struct{}
@@ -25,14 +33,13 @@ func (tests adminServersAddActionTests) testWhenThePassedCommandIsValid(t *testi
 
 	monkey.Patch(getArgs, getArgsMock)
 	monkey.Patch(util.ConvertStrSliceToStr, convertStrSliceToStrMock)
-	monkey.Patch(util.CheckRegexMatch, checkRegexMatchMock)
+	monkey.Patch(util.CheckRegexMatch, checkRegexMatchWhenMatchesMock)
 	monkey.Patch(util.MapCommandArguments, mapCommandArgumentsMock)
 	monkey.Patch(adapter.Servers, serversMock)
 
 	actualErr := adminServersAddAction(&cli.Context{})
 
 	assert.Nil(t, actualErr)
-	monkey.UnpatchAll()
 }
 
 func (tests adminServersAddActionTests) testWhenThereIsNoArguments(t *testing.T) {
@@ -40,43 +47,80 @@ func (tests adminServersAddActionTests) testWhenThereIsNoArguments(t *testing.T)
 
 	monkey.Patch(getArgs, getEmptyArgsMock)
 	monkey.Patch(util.ConvertStrSliceToStr, convertStrSliceToStrMock)
-	monkey.Patch(util.CheckRegexMatch, checkRegexMatchMock)
+	monkey.Patch(util.CheckRegexMatch, checkRegexMatchWhenMatchesMock)
 	monkey.Patch(util.MapCommandArguments, mapCommandArgumentsMock)
 	monkey.Patch(adapter.Servers, serversMock)
 
 	actualErr := adminServersAddAction(&cli.Context{})
 
 	assert.Nil(t, actualErr)
-	monkey.UnpatchAll()
 }
 
-func getArgsMock(ctx *cli.Context) cli.Args {
-	return cli.Args{"--file", "file.json"}
+func (tests adminServersAddActionTests) testWhenThePassedFlagDoesNotExistInSdmExtCli(t *testing.T) {
+	defer monkey.UnpatchAll()
+
+	monkey.Patch(getArgs, getArgsWithWrongFlagMock)
+	monkey.Patch(util.ConvertStrSliceToStr, convertStrSliceToStrWithWrongFlagMock)
+	monkey.Patch(util.CheckRegexMatch, checkRegexMatchWhenDoesNotMatchesMock)
+	monkey.Patch(getSdmCommand, getSdmCommandMock)
+	monkey.Patch(getAppName, getAppNameMock)
+	monkey.Patch(getCommandName, getCommandNameMock)
+	monkey.Patch(commandNotFound, commandNotFoundMock)
+
+	actualErr := adminServersAddAction(&cli.Context{})
+
+	assert.Nil(t, actualErr)
 }
 
-func getEmptyArgsMock(ctx *cli.Context) cli.Args {
-	return cli.Args{}
+func (tests adminServersAddActionTests) testWhenASubcommandIsPassedBetweenAddCommandAndFlag(t *testing.T) {
+	defer monkey.UnpatchAll()
+
+	monkey.Patch(getArgs, getArgsWithSubcommandBetweenCommandAndFlagMock)
+	monkey.Patch(util.ConvertStrSliceToStr, convertStrSliceToStrWithSubcommandBetweenCommandAndFlagMock)
+	monkey.Patch(util.CheckRegexMatch, checkRegexMatchWhenDoesNotMatchesMock)
+	monkey.Patch(getSdmCommand, getSdmCommandMock)
+	monkey.Patch(getAppName, getAppNameMock)
+	monkey.Patch(getCommandName, getCommandNameMock)
+	monkey.Patch(commandNotFound, commandNotFoundMock)
+
+	actualErr := adminServersAddAction(&cli.Context{})
+
+	assert.Nil(t, actualErr)
 }
 
-func convertStrSliceToStrMock(strList []string) string {
-	return "--file file.json"
+func (tests adminServersAddActionTests) testWhenTheSubcommandIsPassedAfterFlagValue(t *testing.T) {
+	defer monkey.UnpatchAll()
+
+	monkey.Patch(getArgs, getArgsWithSubcommandAfterFlagValueMock)
+	monkey.Patch(util.ConvertStrSliceToStr, convertStrSliceToStrWithSubcommandAfterFlagValueMock)
+	monkey.Patch(util.CheckRegexMatch, checkRegexMatchWhenDoesNotMatchesMock)
+	monkey.Patch(getSdmCommand, getSdmCommandMock)
+	monkey.Patch(getAppName, getAppNameMock)
+	monkey.Patch(getCommandName, getCommandNameMock)
+	monkey.Patch(commandNotFound, commandNotFoundMock)
+
+	actualErr := adminServersAddAction(&cli.Context{})
+
+	assert.Nil(t, actualErr)
 }
 
-func checkRegexMatchMock(regexList []string, arguments string) (bool, error) {
-	return true, nil
-}
+func (tests adminServersAddActionTests) testWhenTheSubcommandIsPassedAfterFlag(t *testing.T) {
+	defer monkey.UnpatchAll()
 
-func mapCommandArgumentsMock(arguments []string, flags []cli.Flag) map[string]string {
-	return map[string]string{"--file": "file.json"}
-}
+	monkey.Patch(getArgs, getArgsWithSubcommandAfterFlagMock)
+	monkey.Patch(util.ConvertStrSliceToStr, convertStrSliceToStrWithSubcommandAfterFlagMock)
+	monkey.Patch(util.CheckRegexMatch, checkRegexMatchWhenDoesNotMatchesMock)
+	monkey.Patch(getSdmCommand, getSdmCommandMock)
+	monkey.Patch(getAppName, getAppNameMock)
+	monkey.Patch(getCommandName, getCommandNameMock)
+	monkey.Patch(commandNotFound, commandNotFoundMock)
 
-func serversMock(commandName string, mappedOptions map[string]string) error {
-	return nil
+	actualErr := adminServersAddAction(&cli.Context{})
+
+	assert.Nil(t, actualErr)
 }
 
 func TestGetSdmCommand(t *testing.T) {
-	defer monkey.UnpatchAll()
-
 	tests := getSdmCommandTests{}
 	t.Run("Test getSdmCommand when it is successful",
 		tests.testWhenItIsSucessful)
@@ -96,8 +140,6 @@ func (tests getSdmCommandTests) testWhenItIsSucessful(t *testing.T) {
 }
 
 func TestRemoveSdmExt(t *testing.T) {
-	defer monkey.UnpatchAll()
-
 	tests := removeSdmExtTests{}
 	t.Run("Test removeSdmExt when it is successful",
 		tests.testWhenItIsSucessful)
@@ -123,4 +165,78 @@ func (tests removeSdmExtTests) testWhenItDoesNotContainSdmExt(t *testing.T) {
 	expectedNewAppName := "sdm admin servers"
 
 	assert.Equal(t, expectedNewAppName, actualNewAppName)
+}
+
+func getArgsMock(ctx *cli.Context) cli.Args {
+	return cli.Args{"--file", "file.json"}
+}
+
+func getArgsWithWrongFlagMock(ctx *cli.Context) cli.Args {
+	return cli.Args{"--files", "file.json"}
+}
+
+func getArgsWithSubcommandBetweenCommandAndFlagMock(ctx *cli.Context) cli.Args {
+	return cli.Args{"rdp", "--file", "file.json"}
+}
+
+func getArgsWithSubcommandAfterFlagValueMock(ctx *cli.Context) cli.Args {
+	return cli.Args{"--file", "file.json", "rdp"}
+}
+
+func getArgsWithSubcommandAfterFlagMock(ctx *cli.Context) cli.Args {
+	return cli.Args{"--stdin", "rdp"}
+}
+
+func getEmptyArgsMock(ctx *cli.Context) cli.Args {
+	return cli.Args{}
+}
+
+func convertStrSliceToStrMock(strList []string) string {
+	return "--file file.json"
+}
+
+func convertStrSliceToStrWithSubcommandBetweenCommandAndFlagMock(strList []string) string {
+	return "rdp --file file.json"
+}
+
+func convertStrSliceToStrWithSubcommandAfterFlagValueMock(strList []string) string {
+	return "--file file.json rdp"
+}
+
+func convertStrSliceToStrWithSubcommandAfterFlagMock(strList []string) string {
+	return "--stdin rdp"
+}
+
+func convertStrSliceToStrWithWrongFlagMock(strList []string) string {
+	return "--files file.json"
+}
+
+func checkRegexMatchWhenMatchesMock(regexList []string, arguments string) (bool, error) {
+	return true, nil
+}
+
+func checkRegexMatchWhenDoesNotMatchesMock(regexList []string, arguments string) (bool, error) {
+	return false, nil
+}
+
+func getSdmCommandMock(appName, commandName, arguments string) string {
+	return ""
+}
+
+func getAppNameMock(ctx *cli.Context) string {
+	return "sdm-ext admin servers"
+}
+
+func getCommandNameMock(ctx *cli.Context) string {
+	return "add"
+}
+
+func commandNotFoundMock(ctx *cli.Context, command string) {}
+
+func mapCommandArgumentsMock(arguments []string, flags []cli.Flag) map[string]string {
+	return map[string]string{"--file": "file.json"}
+}
+
+func serversMock(commandName string, mappedOptions map[string]string) error {
+	return nil
 }

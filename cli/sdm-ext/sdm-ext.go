@@ -2,13 +2,13 @@ package main
 
 import (
 	"ext/cli"
-	"ext/util"
 	"fmt"
-
-	"github.com/joho/godotenv"
+	"os"
 )
 
 func main() {
-	godotenv.Load(fmt.Sprintf("%s/.env", util.GetBasePath()))
-	cli.Main()
+	err := cli.NewApp().Run(os.Args)
+	if err != nil {
+		fmt.Println(err)
+	}
 }

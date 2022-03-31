@@ -11,7 +11,6 @@ import (
 )
 
 func TestAdminServersAdd(t *testing.T) {
-	defer monkey.UnpatchAll()
 	tests := adminServersAddTests{}
 	t.Run("Test AdminServersAdd when it is successful",
 		tests.testWhenItIsSucessful)
@@ -28,50 +27,74 @@ func TestAdminServersAdd(t *testing.T) {
 type adminServersAddTests struct{}
 
 func (tests adminServersAddTests) testWhenItIsSucessful(t *testing.T) {
+	defer monkey.UnpatchAll()
+
 	monkey.Patch(util.FindFlag, findFlagMock)
 	monkey.Patch(util.ExtractValuesFromJson, extractValuesFromJsonMock)
 	monkey.Patch(execute, executeWithSuccessMock)
+
 	options := map[string]string{"--file": "file.json"}
 	service := NewAdminService()
 	actualErr := service.AdminServersAdd(options)
+
 	assert.Nil(t, actualErr)
 }
+
 func (tests adminServersAddTests) testWhenFindFlagReturnsEmpty(t *testing.T) {
+	defer monkey.UnpatchAll()
+
 	monkey.Patch(util.FindFlag, findFlagReturningEmptyMock)
+
 	options := map[string]string{"--files": "file.json"}
 	service := NewAdminService()
 	actualErr := service.AdminServersAdd(options)
+
 	assert.Nil(t, actualErr)
 }
+
 func (tests adminServersAddTests) testWhenAnNonexistentFileIsPassed(t *testing.T) {
+	defer monkey.UnpatchAll()
+
 	monkey.Patch(util.FindFlag, findFlagMock)
 	monkey.Patch(util.ExtractValuesFromJson, extractValuesFromJsonWithABaddlyFormattedJsonMock)
+
 	options := map[string]string{"--file": "file.json"}
 	service := NewAdminService()
 	actualErr := service.AdminServersAdd(options)
+
 	expectedErr := errors.New("invalid character '}' looking for beginning of object key string")
+
 	assert.Equal(t, expectedErr.Error(), actualErr.Error())
 }
 func (tests adminServersAddTests) testWhenAnExistentFileWithAWrongContentIsPassed(t *testing.T) {
+	defer monkey.UnpatchAll()
+
 	monkey.Patch(util.FindFlag, findFlagMock)
 	monkey.Patch(util.ExtractValuesFromJson, extractValuesFromJsonWithANonExistentJsonFileMock)
+
 	options := map[string]string{"--file": "file.json"}
 	service := NewAdminService()
 	actualErr := service.AdminServersAdd(options)
+
 	expectedErr := errors.New("open file.json: no such file or directory")
+
 	assert.Equal(t, expectedErr.Error(), actualErr.Error())
 }
+
 func (tests adminServersAddTests) testWhenOneOfTheServersIsNotRegistered(t *testing.T) {
+	defer monkey.UnpatchAll()
+
 	monkey.Patch(util.FindFlag, findFlagMock)
 	monkey.Patch(util.ExtractValuesFromJson, extractValuesFromJsonMock)
 	monkey.Patch(execute, executeWithoutSuccessMock)
+
 	options := map[string]string{"--file": "file.json"}
 	service := NewAdminService()
 	actualErr := service.AdminServersAdd(options)
+
 	assert.Nil(t, actualErr)
 }
 func TestGetOptions(t *testing.T) {
-	defer monkey.UnpatchAll()
 	tests := getOptionsTests{}
 	t.Run("Test getOptions when it is successful",
 		tests.testWhenItIsSucessful)
@@ -99,42 +122,49 @@ func (tests getOptionsTests) testWhenItIsSucessful(t *testing.T) {
 	expectedOptionsMap := getOptionsMap()
 	assert.Equal(t, expectedOptionsMap, actualOptionsMap)
 }
+
 func (tests getOptionsTests) testWhenTheServerContainsTags(t *testing.T) {
 	server := getServerWithTags()
 	actualOptionsMap := getOptions(server)
 	expectedOptionsMap := getOptionsMapWithTags()
 	assert.Equal(t, expectedOptionsMap, actualOptionsMap)
 }
+
 func (tests getOptionsTests) testWhenTheServerContainsPrivateKey(t *testing.T) {
 	server := getServerWithPrivateKey()
 	actualOptionsMap := getOptions(server)
 	expectedOptionsMap := getOptionsMapWithPrivateKey()
 	assert.Equal(t, expectedOptionsMap, actualOptionsMap)
 }
+
 func (tests getOptionsTests) testWhenTheServerNotContainAName(t *testing.T) {
 	server := getServerWithoutName()
 	actualOptionsMap := getOptions(server)
 	expectedOptionsMap := getOptionsMap()
 	assert.Equal(t, expectedOptionsMap, actualOptionsMap)
 }
+
 func (tests getOptionsTests) testWhenTheServerNotContainAType(t *testing.T) {
 	server := getServerWithoutType()
 	actualOptionsMap := getOptions(server)
 	expectedOptionsMap := getOptionsMap()
 	assert.Equal(t, expectedOptionsMap, actualOptionsMap)
 }
+
 func (tests getOptionsTests) testWhenTheServerNotContainANameAndType(t *testing.T) {
 	server := getServerWithoutNameAndType()
 	actualOptionsMap := getOptions(server)
 	expectedOptionsMap := getOptionsMap()
 	assert.Equal(t, expectedOptionsMap, actualOptionsMap)
 }
+
 func (tests getOptionsTests) testWhenTheServerContainAnAttributeEmpty(t *testing.T) {
 	server := getServerWithAnAttributeEmpty()
 	actualOptionsMap := getOptions(server)
 	expectedOptionsMap := getOptionsMap()
 	assert.Equal(t, expectedOptionsMap, actualOptionsMap)
 }
+
 func (tests getOptionsTests) testWhenTheServerIsEmpty(t *testing.T) {
 	server := map[string]interface{}{}
 	actualOptionsMap := getOptions(server)
@@ -142,7 +172,6 @@ func (tests getOptionsTests) testWhenTheServerIsEmpty(t *testing.T) {
 }
 
 func TestTreatKey(t *testing.T) {
-	defer monkey.UnpatchAll()
 	tests := treatKeyTests{}
 	t.Run("Test treatKey when it is successful",
 		tests.testWhenItIsSucessful)
@@ -158,14 +187,15 @@ func (tests treatKeyTests) testWhenItIsSucessful(t *testing.T) {
 	expectedKey := "port-override"
 	assert.Equal(t, expectedKey, actualKey)
 }
+
 func (tests treatKeyTests) testWhenTheKeyIsNotModified(t *testing.T) {
 	key := "hostname"
 	actualKey := treatKey(key)
 	expectedKey := "hostname"
 	assert.Equal(t, expectedKey, actualKey)
 }
+
 func TestTreatTags(t *testing.T) {
-	defer monkey.UnpatchAll()
 	tests := treatTagsTests{}
 	t.Run("Test treatTags when it is successful",
 		tests.testWhenItIsSucessful)
@@ -183,12 +213,14 @@ func (tests treatTagsTests) testWhenItIsSucessful(t *testing.T) {
 	expectedTags := "key1=value1"
 	assert.Equal(t, expectedTags, actualTags)
 }
+
 func (tests treatTagsTests) testWhenTagsMapContainManyTags(t *testing.T) {
 	tagsMap := getTagsMapWithManyTags()
 	actualTags := treatTags(tagsMap)
 	expectedTags := "key1=value1,key2=value2"
 	assert.Equal(t, expectedTags, actualTags)
 }
+
 func (tests treatTagsTests) testWhenTheTagsMapIsEmpty(t *testing.T) {
 	tagsMap := map[string]interface{}{}
 	actualTags := treatTags(tagsMap)
@@ -198,18 +230,23 @@ func (tests treatTagsTests) testWhenTheTagsMapIsEmpty(t *testing.T) {
 func findFlagMock(flagList []string, optionsMap map[string]string) string {
 	return "--file"
 }
+
 func findFlagReturningEmptyMock(flagList []string, optionsMap map[string]string) string {
 	return ""
 }
+
 func extractValuesFromJsonMock(file string) ([]map[string]interface{}, error) {
 	return getMapDataList(), nil
 }
+
 func extractValuesFromJsonWithANonExistentJsonFileMock(file string) ([]map[string]interface{}, error) {
 	return nil, errors.New("open file.json: no such file or directory")
 }
+
 func extractValuesFromJsonWithABaddlyFormattedJsonMock(file string) ([]map[string]interface{}, error) {
 	return nil, errors.New("invalid character '}' looking for beginning of object key string")
 }
+
 func executeWithSuccessMock(commands string, options map[string]string, postOptions string) (strings.Builder, strings.Builder) {
 	stdout := new(strings.Builder)
 	stdout.WriteString("")
@@ -217,6 +254,7 @@ func executeWithSuccessMock(commands string, options map[string]string, postOpti
 	stderr.WriteString("")
 	return *stdout, *stderr
 }
+
 func executeWithoutSuccessMock(commands string, options map[string]string, postOptions string) (strings.Builder, strings.Builder) {
 	stdout := new(strings.Builder)
 	stdout.WriteString("")
@@ -224,6 +262,7 @@ func executeWithoutSuccessMock(commands string, options map[string]string, postO
 	stderr.WriteString("stderr")
 	return *stdout, *stderr
 }
+
 func getMapDataList() []map[string]interface{} {
 	return []map[string]interface{}{
 		{
@@ -233,6 +272,7 @@ func getMapDataList() []map[string]interface{} {
 		},
 	}
 }
+
 func getServer() map[string]interface{} {
 	return map[string]interface{}{
 		"name":     "Example Server",
@@ -240,6 +280,7 @@ func getServer() map[string]interface{} {
 		"type":     "type",
 	}
 }
+
 func getServerWithTags() map[string]interface{} {
 	return map[string]interface{}{
 		"name":     "Example Server",
@@ -250,6 +291,7 @@ func getServerWithTags() map[string]interface{} {
 		},
 	}
 }
+
 func getServerWithPrivateKey() map[string]interface{} {
 	return map[string]interface{}{
 		"name":       "Example Server",
@@ -258,23 +300,27 @@ func getServerWithPrivateKey() map[string]interface{} {
 		"privateKey": "private key",
 	}
 }
+
 func getServerWithoutName() map[string]interface{} {
 	return map[string]interface{}{
 		"hostname": "hostname",
 		"type":     "type",
 	}
 }
+
 func getServerWithoutType() map[string]interface{} {
 	return map[string]interface{}{
 		"name":     "Example Server",
 		"hostname": "hostname",
 	}
 }
+
 func getServerWithoutNameAndType() map[string]interface{} {
 	return map[string]interface{}{
 		"hostname": "hostname",
 	}
 }
+
 func getServerWithAnAttributeEmpty() map[string]interface{} {
 	return map[string]interface{}{
 		"name":     "Example Server",
@@ -283,28 +329,33 @@ func getServerWithAnAttributeEmpty() map[string]interface{} {
 		"username": "",
 	}
 }
+
 func getOptionsMap() map[string]string {
 	return map[string]string{
 		"--hostname": "hostname",
 	}
 }
+
 func getOptionsMapWithTags() map[string]string {
 	return map[string]string{
 		"--hostname": "hostname",
 		"--tags":     "key1=value1",
 	}
 }
+
 func getOptionsMapWithPrivateKey() map[string]string {
 	return map[string]string{
 		"--hostname":     "hostname",
 		"--private-key=": `"private key"`,
 	}
 }
+
 func getTagsMap() map[string]interface{} {
 	return map[string]interface{}{
 		"key1": "value1",
 	}
 }
+
 func getTagsMapWithManyTags() map[string]interface{} {
 	return map[string]interface{}{
 		"key1": "value1",
