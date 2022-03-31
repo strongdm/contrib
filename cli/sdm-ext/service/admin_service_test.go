@@ -10,18 +10,18 @@ import (
 )
 
 func TestExecute(t *testing.T) {
-	defer monkey.UnpatchAll()
-
 	tests := executeTests{}
 	t.Run("Test execute when the passed command is valid",
 		tests.testWhenThePassedCommadIsValid)
-	t.Run("Test execute when command is failed",
-		tests.testWhenThePassedCommadIsFailed)
+	t.Run("Test execute when command fails",
+		tests.testWhenThePassedCommadFails)
 }
 
 type executeTests struct{}
 
 func (tests executeTests) testWhenThePassedCommadIsValid(t *testing.T) {
+	defer monkey.UnpatchAll()
+
 	monkey.Patch(runCommand, runSuccessfulCommandMock)
 
 	commands := getRawTCPServerAddCommand()
@@ -39,7 +39,9 @@ func (tests executeTests) testWhenThePassedCommadIsValid(t *testing.T) {
 	assert.Equal(t, expectedStderr, &actualStderr)
 }
 
-func (tests executeTests) testWhenThePassedCommadIsFailed(t *testing.T) {
+func (tests executeTests) testWhenThePassedCommadFails(t *testing.T) {
+	defer monkey.UnpatchAll()
+
 	monkey.Patch(runCommand, runFailedCommandMock)
 
 	commands := getRawTCPServerAddCommand()
@@ -55,16 +57,6 @@ func (tests executeTests) testWhenThePassedCommadIsFailed(t *testing.T) {
 
 	assert.Equal(t, expectedStdout, &actualStdout)
 	assert.Equal(t, expectedStderr, &actualStderr)
-}
-
-func runSuccessfulCommandMock(cmd *exec.Cmd) {
-	cmd.Stdout.Write([]byte(""))
-	cmd.Stderr.Write([]byte(""))
-}
-
-func runFailedCommandMock(cmd *exec.Cmd) {
-	cmd.Stdout.Write([]byte(""))
-	cmd.Stderr.Write([]byte("stderr"))
 }
 
 func TestOptionsToArguments(t *testing.T) {
@@ -93,6 +85,16 @@ func (tests optionsToArgumentsTests) testWhenTheOptionsAreEmpty(t *testing.T) {
 	actualOptionsList := optionsToArguments(optionsMap)
 
 	assert.Empty(t, actualOptionsList)
+}
+
+func runSuccessfulCommandMock(cmd *exec.Cmd) {
+	cmd.Stdout.Write([]byte(""))
+	cmd.Stderr.Write([]byte(""))
+}
+
+func runFailedCommandMock(cmd *exec.Cmd) {
+	cmd.Stdout.Write([]byte(""))
+	cmd.Stderr.Write([]byte("stderr"))
 }
 
 func getOptionsToExecute() map[string]string {

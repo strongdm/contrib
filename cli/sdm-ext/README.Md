@@ -6,16 +6,7 @@ The SDM-EXT project aims to create a CLI (Command Line Interface) so that the us
 
 You need to install SDM CLI and configure it on your machine. See [Installing the SDM CLI](https://www.strongdm.com/docs/user-guide/client-installation) for how to install. After that, make sure that the SDM CLI can be accessed using the sdm alias in your terminal.
 
-To use the SDM-EXT CLI, you need to provide the following mandatory variables:
-
-- SDM_API_ACCESS_KEY: SDM API access key;
-- SDM_API_SECRET_KEY: SDM API Access Key Secret.
-
-Ps.: you can use .env.example to create your .env file with variables.
-
-![Screenshot from 2022-03-30 10-34-23](https://user-images.githubusercontent.com/49795183/160855074-0dee81d6-fa8d-4292-9d6d-04b3d76f773f.png)
-
-To run the SDM-EXT CLI, after downloading the project, going to its directory and setting the variables above, run the command `go build sdm-ext.go` and export the generated executable file to be able to run the SDM-EXT CLI using only the `sdm-ext` command.
+To run the SDM-EXT CLI, after downloading the project and going to its directory, run the command `go build sdm-ext.go` and export the generated executable file to be able to run the SDM-EXT CLI using only the `sdm-ext` command.
 
 # SDM-EXT flags
 

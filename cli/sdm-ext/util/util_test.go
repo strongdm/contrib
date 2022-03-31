@@ -7,7 +7,6 @@ import (
 	"regexp/syntax"
 	"testing"
 
-	"bou.ke/monkey"
 	"github.com/stretchr/testify/assert"
 	"github.com/urfave/cli"
 )
@@ -22,8 +21,6 @@ const (
 )
 
 func TestMapCommandArguments(t *testing.T) {
-	defer monkey.UnpatchAll()
-
 	tests := mapCommandArgumentsTests{}
 	t.Run("Test MapCommandArguments when it is successful",
 		tests.testWhenItIsSuccessful)
@@ -52,8 +49,6 @@ func (tests mapCommandArgumentsTests) testWhenItReturnsAnEmptyMap(t *testing.T) 
 }
 
 func TestFlagHasName(t *testing.T) {
-	defer monkey.UnpatchAll()
-
 	tests := flagHasNameTests{}
 	t.Run("Test FlagHasName when it is successful",
 		tests.testWhenItIsSuccessful)
@@ -190,8 +185,6 @@ func (tests getUserInputTests) testWhenTheUserInputABadlyFormattedJson(t *testin
 }
 
 func TestConvertStrSliceToStr(t *testing.T) {
-	defer monkey.UnpatchAll()
-
 	tests := convertStrSliceToStrTests{}
 	t.Run("Test ConvertStrSliceToStr when it is successful",
 		tests.testWhenItIsSuccessful)
@@ -218,8 +211,6 @@ func (tests convertStrSliceToStrTests) testWhenTheGivenSliceIsEmpty(t *testing.T
 }
 
 func TestCheckRegexMatch(t *testing.T) {
-	defer monkey.UnpatchAll()
-
 	tests := checkRegexMatchTests{}
 	t.Run("Test CheckRegexMatch when it is successful",
 		tests.testWhenItIsSuccessful)

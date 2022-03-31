@@ -12,14 +12,7 @@ import (
 // Version is set by the build system.
 var Version = ""
 
-func Main() {
-	err := newApp().Run(os.Args)
-	if err != nil {
-		fmt.Println(err)
-	}
-}
-
-func newApp() *cli.App {
+func NewApp() *cli.App {
 	app := cli.NewApp()
 	app.Name = "sdm-ext"
 	app.Usage = "sdm-ext is an extension of sdm admin"

@@ -4,13 +4,10 @@ import (
 	"errors"
 	"testing"
 
-	"bou.ke/monkey"
 	"github.com/stretchr/testify/assert"
 )
 
 func TestServers(t *testing.T) {
-	defer monkey.UnpatchAll()
-
 	tests := serversTests{}
 	t.Run("Test Servers when command name is add",
 		tests.testWhenCommandNameIsAdd)

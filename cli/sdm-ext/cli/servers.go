@@ -52,7 +52,7 @@ func adminServersAddAction(ctx *cli.Context) error {
 	}
 
 	if !matched {
-		sdmCommand := getSdmCommand(ctx.App.Name, ctx.Command.Name, arguments)
+		sdmCommand := getSdmCommand(getAppName(ctx), getCommandName(ctx), arguments)
 		commandNotFound(ctx, sdmCommand)
 
 		return nil
@@ -77,6 +77,20 @@ func getArgs(ctx *cli.Context) cli.Args {
 func getSdmCommand(appName, commandName, arguments string) string {
 	newAppName := removeSdmExt(appName)
 	return fmt.Sprintf("%s %s %s", newAppName, commandName, arguments)
+}
+
+func getAppName(ctx *cli.Context) string {
+	if ctx == nil {
+		fmt.Println() // Needed because mock
+	}
+	return ctx.App.Name
+}
+
+func getCommandName(ctx *cli.Context) string {
+	if ctx == nil {
+		fmt.Println() // Needed because mock
+	}
+	return ctx.Command.Name
 }
 
 func removeSdmExt(appName string) string {
