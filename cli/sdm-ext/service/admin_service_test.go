@@ -5,7 +5,6 @@ import (
 	"strings"
 	"testing"
 
-	"bou.ke/monkey"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -20,9 +19,11 @@ func TestExecute(t *testing.T) {
 type executeTests struct{}
 
 func (tests executeTests) testWhenThePassedCommadIsValid(t *testing.T) {
-	defer monkey.UnpatchAll()
-
-	monkey.Patch(runCommand, runSuccessfulCommandMock)
+	runCommandBackup := runCommand
+	runCommand = runSuccessfulCommandMock
+	defer func() {
+		runCommand = runCommandBackup
+	}()
 
 	commands := getRawTCPServerAddCommand()
 	options := getOptionsToExecute()
@@ -40,9 +41,11 @@ func (tests executeTests) testWhenThePassedCommadIsValid(t *testing.T) {
 }
 
 func (tests executeTests) testWhenThePassedCommadFails(t *testing.T) {
-	defer monkey.UnpatchAll()
-
-	monkey.Patch(runCommand, runFailedCommandMock)
+	runCommandBackup := runCommand
+	runCommand = runFailedCommandMock
+	defer func() {
+		runCommand = runCommandBackup
+	}()
 
 	commands := getRawTCPServerAddCommand()
 	options := getOptionsToExecute()

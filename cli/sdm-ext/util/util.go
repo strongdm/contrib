@@ -11,7 +11,7 @@ import (
 	"github.com/urfave/cli"
 )
 
-func MapCommandArguments(arguments []string, flags []cli.Flag) map[string]string {
+var MapCommandArguments = func(arguments []string, flags []cli.Flag) map[string]string {
 	argsMapping := map[string]string{}
 
 	previousArgIsFlag := false
@@ -45,7 +45,7 @@ func FlagHasName(flag cli.Flag, argKey string) bool {
 	return foundFlag
 }
 
-func ExtractValuesFromJson(file string) ([]map[string]interface{}, error) {
+var ExtractValuesFromJson = func(file string) ([]map[string]interface{}, error) {
 	readFile, err := ioutil.ReadFile(file)
 	if err != nil {
 		return nil, err
@@ -71,7 +71,7 @@ func GetUserInput() ([]map[string]interface{}, error) {
 	return data, nil
 }
 
-func ConvertStrSliceToStr(strList []string) string {
+var ConvertStrSliceToStr = func(strList []string) string {
 	fmt.Print() // Needed because mock
 	strs := ""
 	for i, str := range strList {
@@ -85,7 +85,7 @@ func ConvertStrSliceToStr(strList []string) string {
 	return strs
 }
 
-func CheckRegexMatch(regexList []string, arguments string) (bool, error) {
+var CheckRegexMatch = func(regexList []string, arguments string) (bool, error) {
 	var matched bool
 	var err error
 	for _, regex := range regexList {

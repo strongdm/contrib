@@ -67,26 +67,26 @@ func adminServersAddAction(ctx *cli.Context) error {
 	return nil
 }
 
-func getArgs(ctx *cli.Context) cli.Args {
+var getArgs = func(ctx *cli.Context) cli.Args {
 	if ctx == nil {
 		fmt.Println() // Needed because mock
 	}
 	return ctx.Args()
 }
 
-func getSdmCommand(appName, commandName, arguments string) string {
+var getSdmCommand = func(appName, commandName, arguments string) string {
 	newAppName := removeSdmExt(appName)
 	return fmt.Sprintf("%s %s %s", newAppName, commandName, arguments)
 }
 
-func getAppName(ctx *cli.Context) string {
+var getAppName = func(ctx *cli.Context) string {
 	if ctx == nil {
 		fmt.Println() // Needed because mock
 	}
 	return ctx.App.Name
 }
 
-func getCommandName(ctx *cli.Context) string {
+var getCommandName = func(ctx *cli.Context) string {
 	if ctx == nil {
 		fmt.Println() // Needed because mock
 	}

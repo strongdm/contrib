@@ -5,7 +5,6 @@ import (
 	"strings"
 	"testing"
 
-	"bou.ke/monkey"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -20,9 +19,11 @@ func TestExecuteWithSdm(t *testing.T) {
 type executeWithSdmTests struct{}
 
 func (tests executeWithSdmTests) testWhenSdmCommandIsSuccessful(t *testing.T) {
-	defer monkey.UnpatchAll()
-
-	monkey.Patch(runCommand, runSuccessfulCommandMock)
+	runCommandBackup := runCommand
+	runCommand = runSuccessfulCommandMock
+	defer func() {
+		runCommand = runCommandBackup
+	}()
 
 	actualStdout, actualStderr := executeWithSdm()
 
@@ -36,9 +37,11 @@ func (tests executeWithSdmTests) testWhenSdmCommandIsSuccessful(t *testing.T) {
 }
 
 func (tests executeWithSdmTests) testWhenSdmCommandFails(t *testing.T) {
-	defer monkey.UnpatchAll()
-
-	monkey.Patch(runCommand, runFailedCommandMock)
+	runCommandBackup := runCommand
+	runCommand = runFailedCommandMock
+	defer func() {
+		runCommand = runCommandBackup
+	}()
 
 	actualStdout, actualStderr := executeWithSdm()
 

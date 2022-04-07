@@ -6,7 +6,6 @@ import (
 	"strings"
 	"testing"
 
-	"bou.ke/monkey"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -27,11 +26,23 @@ func TestAdminServersAdd(t *testing.T) {
 type adminServersAddTests struct{}
 
 func (tests adminServersAddTests) testWhenItIsSucessful(t *testing.T) {
-	defer monkey.UnpatchAll()
+	findFlagBackup := util.FindFlag
+	util.FindFlag = findFlagMock
+	defer func() {
+		util.FindFlag = findFlagBackup
+	}()
 
-	monkey.Patch(util.FindFlag, findFlagMock)
-	monkey.Patch(util.ExtractValuesFromJson, extractValuesFromJsonMock)
-	monkey.Patch(execute, executeWithSuccessMock)
+	extractValuesFromJsonBackup := util.ExtractValuesFromJson
+	util.ExtractValuesFromJson = extractValuesFromJsonMock
+	defer func() {
+		util.ExtractValuesFromJson = extractValuesFromJsonBackup
+	}()
+
+	executeBackup := execute
+	execute = executeWithSuccessMock
+	defer func() {
+		execute = executeBackup
+	}()
 
 	options := map[string]string{"--file": "file.json"}
 	service := NewAdminService()
@@ -41,9 +52,11 @@ func (tests adminServersAddTests) testWhenItIsSucessful(t *testing.T) {
 }
 
 func (tests adminServersAddTests) testWhenFindFlagReturnsEmpty(t *testing.T) {
-	defer monkey.UnpatchAll()
-
-	monkey.Patch(util.FindFlag, findFlagReturningEmptyMock)
+	findFlagBackup := util.FindFlag
+	util.FindFlag = findFlagReturningEmptyMock
+	defer func() {
+		util.FindFlag = findFlagBackup
+	}()
 
 	options := map[string]string{"--files": "file.json"}
 	service := NewAdminService()
@@ -53,10 +66,17 @@ func (tests adminServersAddTests) testWhenFindFlagReturnsEmpty(t *testing.T) {
 }
 
 func (tests adminServersAddTests) testWhenAnNonexistentFileIsPassed(t *testing.T) {
-	defer monkey.UnpatchAll()
+	findFlagBackup := util.FindFlag
+	util.FindFlag = findFlagMock
+	defer func() {
+		util.FindFlag = findFlagBackup
+	}()
 
-	monkey.Patch(util.FindFlag, findFlagMock)
-	monkey.Patch(util.ExtractValuesFromJson, extractValuesFromJsonWithABaddlyFormattedJsonMock)
+	extractValuesFromJsonBackup := util.ExtractValuesFromJson
+	util.ExtractValuesFromJson = extractValuesFromJsonWithABaddlyFormattedJsonMock
+	defer func() {
+		util.ExtractValuesFromJson = extractValuesFromJsonBackup
+	}()
 
 	options := map[string]string{"--file": "file.json"}
 	service := NewAdminService()
@@ -67,10 +87,17 @@ func (tests adminServersAddTests) testWhenAnNonexistentFileIsPassed(t *testing.T
 	assert.Equal(t, expectedErr.Error(), actualErr.Error())
 }
 func (tests adminServersAddTests) testWhenAnExistentFileWithAWrongContentIsPassed(t *testing.T) {
-	defer monkey.UnpatchAll()
+	findFlagBackup := util.FindFlag
+	util.FindFlag = findFlagMock
+	defer func() {
+		util.FindFlag = findFlagBackup
+	}()
 
-	monkey.Patch(util.FindFlag, findFlagMock)
-	monkey.Patch(util.ExtractValuesFromJson, extractValuesFromJsonWithANonExistentJsonFileMock)
+	extractValuesFromJsonBackup := util.ExtractValuesFromJson
+	util.ExtractValuesFromJson = extractValuesFromJsonWithANonExistentJsonFileMock
+	defer func() {
+		util.ExtractValuesFromJson = extractValuesFromJsonBackup
+	}()
 
 	options := map[string]string{"--file": "file.json"}
 	service := NewAdminService()
@@ -82,11 +109,23 @@ func (tests adminServersAddTests) testWhenAnExistentFileWithAWrongContentIsPasse
 }
 
 func (tests adminServersAddTests) testWhenOneOfTheServersIsNotRegistered(t *testing.T) {
-	defer monkey.UnpatchAll()
+	findFlagBackup := util.FindFlag
+	util.FindFlag = findFlagMock
+	defer func() {
+		util.FindFlag = findFlagBackup
+	}()
 
-	monkey.Patch(util.FindFlag, findFlagMock)
-	monkey.Patch(util.ExtractValuesFromJson, extractValuesFromJsonMock)
-	monkey.Patch(execute, executeWithoutSuccessMock)
+	extractValuesFromJsonBackup := util.ExtractValuesFromJson
+	util.ExtractValuesFromJson = extractValuesFromJsonMock
+	defer func() {
+		util.ExtractValuesFromJson = extractValuesFromJsonBackup
+	}()
+
+	executeBackup := execute
+	execute = executeWithoutSuccessMock
+	defer func() {
+		execute = executeBackup
+	}()
 
 	options := map[string]string{"--file": "file.json"}
 	service := NewAdminService()

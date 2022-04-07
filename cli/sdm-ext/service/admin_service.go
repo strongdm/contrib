@@ -12,7 +12,7 @@ func NewAdminService() *AdminService {
 	return &AdminService{}
 }
 
-func execute(commands string, options map[string]string, postOptions string) (strings.Builder, strings.Builder) {
+var execute = func(commands string, options map[string]string, postOptions string) (strings.Builder, strings.Builder) {
 	opts := append(optionsToArguments(options), postOptions)
 	commandsAndOptions := append(strings.Split(commands, " "), opts...)
 
@@ -29,7 +29,7 @@ func execute(commands string, options map[string]string, postOptions string) (st
 	return *stdout, *stderr
 }
 
-func runCommand(cmd *exec.Cmd) {
+var runCommand = func(cmd *exec.Cmd) {
 	err := cmd.Run()
 	if err != nil {
 		fmt.Println(err)

@@ -5,7 +5,6 @@ import (
 	"ext/util"
 	"testing"
 
-	"bou.ke/monkey"
 	"github.com/stretchr/testify/assert"
 	"github.com/urfave/cli"
 )
@@ -29,13 +28,35 @@ func TestAdminServersAddAction(t *testing.T) {
 type adminServersAddActionTests struct{}
 
 func (tests adminServersAddActionTests) testWhenThePassedCommandIsValid(t *testing.T) {
-	defer monkey.UnpatchAll()
+	getArgsBackup := getArgs
+	getArgs = getArgsMock
+	defer func() {
+		getArgs = getArgsBackup
+	}()
 
-	monkey.Patch(getArgs, getArgsMock)
-	monkey.Patch(util.ConvertStrSliceToStr, convertStrSliceToStrMock)
-	monkey.Patch(util.CheckRegexMatch, checkRegexMatchWhenMatchesMock)
-	monkey.Patch(util.MapCommandArguments, mapCommandArgumentsMock)
-	monkey.Patch(adapter.Servers, serversMock)
+	convertStrSliceToStrBackup := util.ConvertStrSliceToStr
+	util.ConvertStrSliceToStr = convertStrSliceToStrMock
+	defer func() {
+		util.ConvertStrSliceToStr = convertStrSliceToStrBackup
+	}()
+
+	checkRegexMatchBackup := util.CheckRegexMatch
+	util.CheckRegexMatch = checkRegexMatchWhenMatchesMock
+	defer func() {
+		util.CheckRegexMatch = checkRegexMatchBackup
+	}()
+
+	mapCommandArgumentsBackup := util.MapCommandArguments
+	util.MapCommandArguments = mapCommandArgumentsMock
+	defer func() {
+		util.MapCommandArguments = mapCommandArgumentsBackup
+	}()
+
+	serversBackup := adapter.Servers
+	adapter.Servers = serversMock
+	defer func() {
+		adapter.Servers = serversBackup
+	}()
 
 	actualErr := adminServersAddAction(&cli.Context{})
 
@@ -43,13 +64,35 @@ func (tests adminServersAddActionTests) testWhenThePassedCommandIsValid(t *testi
 }
 
 func (tests adminServersAddActionTests) testWhenThereIsNoArguments(t *testing.T) {
-	defer monkey.UnpatchAll()
+	getArgsBackup := getArgs
+	getArgs = getEmptyArgsMock
+	defer func() {
+		getArgs = getArgsBackup
+	}()
 
-	monkey.Patch(getArgs, getEmptyArgsMock)
-	monkey.Patch(util.ConvertStrSliceToStr, convertStrSliceToStrMock)
-	monkey.Patch(util.CheckRegexMatch, checkRegexMatchWhenMatchesMock)
-	monkey.Patch(util.MapCommandArguments, mapCommandArgumentsMock)
-	monkey.Patch(adapter.Servers, serversMock)
+	convertStrSliceToStrBackup := util.ConvertStrSliceToStr
+	util.ConvertStrSliceToStr = convertStrSliceToStrMock
+	defer func() {
+		util.ConvertStrSliceToStr = convertStrSliceToStrBackup
+	}()
+
+	checkRegexMatchBackup := util.CheckRegexMatch
+	util.CheckRegexMatch = checkRegexMatchWhenMatchesMock
+	defer func() {
+		util.CheckRegexMatch = checkRegexMatchBackup
+	}()
+
+	mapCommandArgumentsBackup := util.MapCommandArguments
+	util.MapCommandArguments = mapCommandArgumentsMock
+	defer func() {
+		util.MapCommandArguments = mapCommandArgumentsBackup
+	}()
+
+	serversBackup := adapter.Servers
+	adapter.Servers = serversMock
+	defer func() {
+		adapter.Servers = serversBackup
+	}()
 
 	actualErr := adminServersAddAction(&cli.Context{})
 
@@ -57,15 +100,47 @@ func (tests adminServersAddActionTests) testWhenThereIsNoArguments(t *testing.T)
 }
 
 func (tests adminServersAddActionTests) testWhenThePassedFlagDoesNotExistInSdmExtCli(t *testing.T) {
-	defer monkey.UnpatchAll()
+	getArgsBackup := getArgs
+	getArgs = getArgsWithWrongFlagMock
+	defer func() {
+		getArgs = getArgsBackup
+	}()
 
-	monkey.Patch(getArgs, getArgsWithWrongFlagMock)
-	monkey.Patch(util.ConvertStrSliceToStr, convertStrSliceToStrWithWrongFlagMock)
-	monkey.Patch(util.CheckRegexMatch, checkRegexMatchWhenDoesNotMatchesMock)
-	monkey.Patch(getSdmCommand, getSdmCommandMock)
-	monkey.Patch(getAppName, getAppNameMock)
-	monkey.Patch(getCommandName, getCommandNameMock)
-	monkey.Patch(commandNotFound, commandNotFoundMock)
+	convertStrSliceToStrBackup := util.ConvertStrSliceToStr
+	util.ConvertStrSliceToStr = convertStrSliceToStrWithWrongFlagMock
+	defer func() {
+		util.ConvertStrSliceToStr = convertStrSliceToStrBackup
+	}()
+
+	checkRegexMatchBackup := util.CheckRegexMatch
+	util.CheckRegexMatch = checkRegexMatchWhenDoesNotMatchesMock
+	defer func() {
+		util.CheckRegexMatch = checkRegexMatchBackup
+	}()
+
+	getSdmCommandBackup := getSdmCommand
+	getSdmCommand = getSdmCommandMock
+	defer func() {
+		getSdmCommand = getSdmCommandBackup
+	}()
+
+	getAppNameBackup := getAppName
+	getAppName = getAppNameMock
+	defer func() {
+		getAppName = getAppNameBackup
+	}()
+
+	getCommandNameBackup := getCommandName
+	getCommandName = getCommandNameMock
+	defer func() {
+		getCommandName = getCommandNameBackup
+	}()
+
+	commandNotFoundBackup := commandNotFound
+	commandNotFound = commandNotFoundMock
+	defer func() {
+		commandNotFound = commandNotFoundBackup
+	}()
 
 	actualErr := adminServersAddAction(&cli.Context{})
 
@@ -73,15 +148,47 @@ func (tests adminServersAddActionTests) testWhenThePassedFlagDoesNotExistInSdmEx
 }
 
 func (tests adminServersAddActionTests) testWhenASubcommandIsPassedBetweenAddCommandAndFlag(t *testing.T) {
-	defer monkey.UnpatchAll()
+	getArgsBackup := getArgs
+	getArgs = getArgsWithSubcommandBetweenCommandAndFlagMock
+	defer func() {
+		getArgs = getArgsBackup
+	}()
 
-	monkey.Patch(getArgs, getArgsWithSubcommandBetweenCommandAndFlagMock)
-	monkey.Patch(util.ConvertStrSliceToStr, convertStrSliceToStrWithSubcommandBetweenCommandAndFlagMock)
-	monkey.Patch(util.CheckRegexMatch, checkRegexMatchWhenDoesNotMatchesMock)
-	monkey.Patch(getSdmCommand, getSdmCommandMock)
-	monkey.Patch(getAppName, getAppNameMock)
-	monkey.Patch(getCommandName, getCommandNameMock)
-	monkey.Patch(commandNotFound, commandNotFoundMock)
+	convertStrSliceToStrBackup := util.ConvertStrSliceToStr
+	util.ConvertStrSliceToStr = convertStrSliceToStrWithSubcommandBetweenCommandAndFlagMock
+	defer func() {
+		util.ConvertStrSliceToStr = convertStrSliceToStrBackup
+	}()
+
+	checkRegexMatchBackup := util.CheckRegexMatch
+	util.CheckRegexMatch = checkRegexMatchWhenDoesNotMatchesMock
+	defer func() {
+		util.CheckRegexMatch = checkRegexMatchBackup
+	}()
+
+	getSdmCommandBackup := getSdmCommand
+	getSdmCommand = getSdmCommandMock
+	defer func() {
+		getSdmCommand = getSdmCommandBackup
+	}()
+
+	getAppNameBackup := getAppName
+	getAppName = getAppNameMock
+	defer func() {
+		getAppName = getAppNameBackup
+	}()
+
+	getCommandNameBackup := getCommandName
+	getCommandName = getCommandNameMock
+	defer func() {
+		getCommandName = getCommandNameBackup
+	}()
+
+	commandNotFoundBackup := commandNotFound
+	commandNotFound = commandNotFoundMock
+	defer func() {
+		commandNotFound = commandNotFoundBackup
+	}()
 
 	actualErr := adminServersAddAction(&cli.Context{})
 
@@ -89,15 +196,47 @@ func (tests adminServersAddActionTests) testWhenASubcommandIsPassedBetweenAddCom
 }
 
 func (tests adminServersAddActionTests) testWhenTheSubcommandIsPassedAfterFlagValue(t *testing.T) {
-	defer monkey.UnpatchAll()
+	getArgsBackup := getArgs
+	getArgs = getArgsWithSubcommandAfterFlagValueMock
+	defer func() {
+		getArgs = getArgsBackup
+	}()
 
-	monkey.Patch(getArgs, getArgsWithSubcommandAfterFlagValueMock)
-	monkey.Patch(util.ConvertStrSliceToStr, convertStrSliceToStrWithSubcommandAfterFlagValueMock)
-	monkey.Patch(util.CheckRegexMatch, checkRegexMatchWhenDoesNotMatchesMock)
-	monkey.Patch(getSdmCommand, getSdmCommandMock)
-	monkey.Patch(getAppName, getAppNameMock)
-	monkey.Patch(getCommandName, getCommandNameMock)
-	monkey.Patch(commandNotFound, commandNotFoundMock)
+	convertStrSliceToStrBackup := util.ConvertStrSliceToStr
+	util.ConvertStrSliceToStr = convertStrSliceToStrWithSubcommandAfterFlagValueMock
+	defer func() {
+		util.ConvertStrSliceToStr = convertStrSliceToStrBackup
+	}()
+
+	checkRegexMatchBackup := util.CheckRegexMatch
+	util.CheckRegexMatch = checkRegexMatchWhenDoesNotMatchesMock
+	defer func() {
+		util.CheckRegexMatch = checkRegexMatchBackup
+	}()
+
+	getSdmCommandBackup := getSdmCommand
+	getSdmCommand = getSdmCommandMock
+	defer func() {
+		getSdmCommand = getSdmCommandBackup
+	}()
+
+	getAppNameBackup := getAppName
+	getAppName = getAppNameMock
+	defer func() {
+		getAppName = getAppNameBackup
+	}()
+
+	getCommandNameBackup := getCommandName
+	getCommandName = getCommandNameMock
+	defer func() {
+		getCommandName = getCommandNameBackup
+	}()
+
+	commandNotFoundBackup := commandNotFound
+	commandNotFound = commandNotFoundMock
+	defer func() {
+		commandNotFound = commandNotFoundBackup
+	}()
 
 	actualErr := adminServersAddAction(&cli.Context{})
 
@@ -105,15 +244,47 @@ func (tests adminServersAddActionTests) testWhenTheSubcommandIsPassedAfterFlagVa
 }
 
 func (tests adminServersAddActionTests) testWhenTheSubcommandIsPassedAfterFlag(t *testing.T) {
-	defer monkey.UnpatchAll()
+	getArgsBackup := getArgs
+	getArgs = getArgsWithSubcommandAfterFlagMock
+	defer func() {
+		getArgs = getArgsBackup
+	}()
 
-	monkey.Patch(getArgs, getArgsWithSubcommandAfterFlagMock)
-	monkey.Patch(util.ConvertStrSliceToStr, convertStrSliceToStrWithSubcommandAfterFlagMock)
-	monkey.Patch(util.CheckRegexMatch, checkRegexMatchWhenDoesNotMatchesMock)
-	monkey.Patch(getSdmCommand, getSdmCommandMock)
-	monkey.Patch(getAppName, getAppNameMock)
-	monkey.Patch(getCommandName, getCommandNameMock)
-	monkey.Patch(commandNotFound, commandNotFoundMock)
+	convertStrSliceToStrBackup := util.ConvertStrSliceToStr
+	util.ConvertStrSliceToStr = convertStrSliceToStrWithSubcommandAfterFlagMock
+	defer func() {
+		util.ConvertStrSliceToStr = convertStrSliceToStrBackup
+	}()
+
+	checkRegexMatchBackup := util.CheckRegexMatch
+	util.CheckRegexMatch = checkRegexMatchWhenDoesNotMatchesMock
+	defer func() {
+		util.CheckRegexMatch = checkRegexMatchBackup
+	}()
+
+	getSdmCommandBackup := getSdmCommand
+	getSdmCommand = getSdmCommandMock
+	defer func() {
+		getSdmCommand = getSdmCommandBackup
+	}()
+
+	getAppNameBackup := getAppName
+	getAppName = getAppNameMock
+	defer func() {
+		getAppName = getAppNameBackup
+	}()
+
+	getCommandNameBackup := getCommandName
+	getCommandName = getCommandNameMock
+	defer func() {
+		getCommandName = getCommandNameBackup
+	}()
+
+	commandNotFoundBackup := commandNotFound
+	commandNotFound = commandNotFoundMock
+	defer func() {
+		commandNotFound = commandNotFoundBackup
+	}()
 
 	actualErr := adminServersAddAction(&cli.Context{})
 
