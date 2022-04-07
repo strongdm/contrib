@@ -43,14 +43,14 @@ func executeWithSdm() (*strings.Builder, *strings.Builder) {
 	return stdout, stderr
 }
 
-func runCommand(cmd *exec.Cmd) {
+var runCommand = func(cmd *exec.Cmd) {
 	err := cmd.Run()
 	if err != nil {
 		fmt.Println(err)
 	}
 }
 
-func commandNotFound(ctx *cli.Context, command string) {
+var commandNotFound = func(ctx *cli.Context, command string) {
 	stdout, stderr := executeWithSdm()
 	fmt.Print(stdout.String())
 	fmt.Print(stderr.String())

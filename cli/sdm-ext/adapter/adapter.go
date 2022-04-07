@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func Servers(commandName string, mappedOptions map[string]string) error {
+var Servers = func(commandName string, mappedOptions map[string]string) error {
 	adminService := service.NewAdminService()
 
 	switch commandName {
