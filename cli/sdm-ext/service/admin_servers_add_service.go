@@ -3,19 +3,20 @@ package service
 import (
 	"ext/util"
 	"fmt"
+	"sort"
 	"strings"
 	"unicode"
 )
 
-func (a AdminService) AdminServersAdd(options map[string]string) error {
+func (a AdminServiceImpl) AdminServersAdd(options map[string]string) error {
 	flagList := []string{"--file", "-f", "--stdin", "-i"}
-	flag := util.FindFlag(flagList, options)
+	flag := a.findFlag(flagList, options)
 
 	var servers []map[string]interface{}
 	var err error
 
 	if flag == "--file" || flag == "-f" {
-		servers, err = util.ExtractValuesFromJson(options[flag])
+		servers, err = a.extractValuesFromJson(options[flag])
 		if err != nil {
 			return err
 		}
@@ -30,7 +31,7 @@ func (a AdminService) AdminServersAdd(options map[string]string) error {
 		serverName := fmt.Sprint(server["name"])
 		serverType := fmt.Sprint(server["type"])
 
-		_, stderr := execute(
+		_, stderr := a.execute(
 			fmt.Sprintf("admin servers add %s", serverType),
 			getOptions(server),
 			serverName,
@@ -79,10 +80,16 @@ func treatKey(key string) string {
 }
 
 func treatTags(tagsMap map[string]interface{}) string {
+	keys := make([]string, 0, len(tagsMap))
+	for key := range tagsMap {
+		keys = append(keys, key)
+	}
+	sort.Strings(keys)
+
 	tags := ""
 	i := 0
-	for key, value := range tagsMap {
-		tags += fmt.Sprintf("%s=%s", key, value)
+	for _, key := range keys {
+		tags += fmt.Sprintf("%s=%s", key, tagsMap[key])
 		if i < len(tagsMap)-1 {
 			tags += ","
 		}

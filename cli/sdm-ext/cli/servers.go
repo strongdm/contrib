@@ -1,7 +1,6 @@
 package cli
 
 import (
-	"ext/adapter"
 	"ext/util"
 	"fmt"
 	"strings"
@@ -10,8 +9,8 @@ import (
 )
 
 const (
-	FILE_REGEX_PATTERN  = `^--file [\.\/\w,-]+\.[A-Za-z]+$`
-	F_REGEX_PATTERN     = `^-f [\.\/\w,-]+\.[A-Za-z]+$`
+	FILE_REGEX_PATTERN  = `^--file [\.:\/\\\w,-]+\.[A-Za-z]+$`
+	F_REGEX_PATTERN     = `^-f [\.:\/\\\w,-]+\.[A-Za-z]+$`
 	STDIN_REGEX_PATTERN = `^--stdin$`
 	I_REGEX_PATTERN     = `^-i$`
 )
@@ -33,7 +32,7 @@ var adminServersAddCommand = cli.Command{
 	Aliases:         []string{"create"},
 	Usage:           "add one or more server",
 	Flags:           adminServersAddFlags,
-	Action:          adminServersAddAction,
+	Action:          NewSdmExt().adminServersAddAction,
 	SkipFlagParsing: true,
 }
 
@@ -42,24 +41,23 @@ var adminServersAddFlags = []cli.Flag{
 	util.GetAdminServersAddStdinFlag(),
 }
 
-func adminServersAddAction(ctx *cli.Context) error {
-	argumentList := getArgs(ctx)
-	arguments := util.ConvertStrSliceToStr(argumentList)
-
-	matched, err := util.CheckRegexMatch(getRegexList(), arguments)
+func (i sdmExtImpl) adminServersAddAction(ctx *cli.Context) error {
+	argumentList := i.getArgs(ctx)
+	arguments := i.convertStrSliceToStr(argumentList)
+	matched, err := i.checkRegexMatch(getRegexList(), arguments)
 	if err != nil {
 		return err
 	}
 
 	if !matched {
-		sdmCommand := getSdmCommand(getAppName(ctx), getCommandName(ctx), arguments)
-		commandNotFound(ctx, sdmCommand)
+		sdmCommand := i.getSdmCommand(i.getAppName(ctx), i.getCommandName(ctx), arguments)
+		i.commandNotFound(ctx, sdmCommand)
 
 		return nil
 	}
 
-	mappedArguments := util.MapCommandArguments(argumentList, adminServersAddFlags)
-	err = adapter.Servers(ctx.Command.Name, mappedArguments)
+	mappedArguments := i.mapCommandArguments(argumentList, adminServersAddFlags)
+	err = i.servers(ctx.Command.Name, mappedArguments)
 	if err != nil {
 		return err
 	}
@@ -67,29 +65,20 @@ func adminServersAddAction(ctx *cli.Context) error {
 	return nil
 }
 
-var getArgs = func(ctx *cli.Context) cli.Args {
-	if ctx == nil {
-		fmt.Println() // Needed because mock
-	}
+func getArgs(ctx *cli.Context) cli.Args {
 	return ctx.Args()
 }
 
-var getSdmCommand = func(appName, commandName, arguments string) string {
+func getSdmCommand(appName, commandName, arguments string) string {
 	newAppName := removeSdmExt(appName)
 	return fmt.Sprintf("%s %s %s", newAppName, commandName, arguments)
 }
 
-var getAppName = func(ctx *cli.Context) string {
-	if ctx == nil {
-		fmt.Println() // Needed because mock
-	}
+func getAppName(ctx *cli.Context) string {
 	return ctx.App.Name
 }
 
-var getCommandName = func(ctx *cli.Context) string {
-	if ctx == nil {
-		fmt.Println() // Needed because mock
-	}
+func getCommandName(ctx *cli.Context) string {
 	return ctx.Command.Name
 }
 

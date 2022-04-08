@@ -18,7 +18,7 @@ func GetAdminServersAddStdinFlag() cli.BoolFlag {
 	}
 }
 
-var FindFlag = func(flagList []string, optionsMap map[string]string) string {
+func FindFlag(flagList []string, optionsMap map[string]string) string {
 	for _, flag := range flagList {
 		for key := range optionsMap {
 			if flag == key {
