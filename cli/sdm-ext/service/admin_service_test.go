@@ -19,17 +19,13 @@ func TestExecute(t *testing.T) {
 type executeTests struct{}
 
 func (tests executeTests) testWhenThePassedCommadIsValid(t *testing.T) {
-	runCommandBackup := runCommand
-	runCommand = runSuccessfulCommandMock
-	defer func() {
-		runCommand = runCommandBackup
-	}()
+	sdmServiceImpl := NewSdmServiceMock(runSuccessfulCommandMock)
 
 	commands := getRawTCPServerAddCommand()
 	options := getOptionsToExecute()
 	postOptions := getRawTCPServerName()
 
-	actualStdout, actualStderr := execute(commands, options, postOptions)
+	actualStdout, actualStderr := sdmServiceImpl.execute(commands, options, postOptions)
 
 	expectedStdout := new(strings.Builder)
 	expectedStdout.Write([]byte(""))
@@ -41,17 +37,13 @@ func (tests executeTests) testWhenThePassedCommadIsValid(t *testing.T) {
 }
 
 func (tests executeTests) testWhenThePassedCommadFails(t *testing.T) {
-	runCommandBackup := runCommand
-	runCommand = runFailedCommandMock
-	defer func() {
-		runCommand = runCommandBackup
-	}()
+	sdmServiceImpl := NewSdmServiceMock(runFailedCommandMock)
 
 	commands := getRawTCPServerAddCommand()
 	options := getOptionsToExecute()
 	postOptions := getRawTCPServerName()
 
-	actualStdout, actualStderr := execute(commands, options, postOptions)
+	actualStdout, actualStderr := sdmServiceImpl.execute(commands, options, postOptions)
 
 	expectedStdout := new(strings.Builder)
 	expectedStdout.Write([]byte(""))

@@ -19,13 +19,9 @@ func TestExecuteWithSdm(t *testing.T) {
 type executeWithSdmTests struct{}
 
 func (tests executeWithSdmTests) testWhenSdmCommandIsSuccessful(t *testing.T) {
-	runCommandBackup := runCommand
-	runCommand = runSuccessfulCommandMock
-	defer func() {
-		runCommand = runCommandBackup
-	}()
+	sdmImpl := NewSdmMock(runSuccessfulCommandMock)
 
-	actualStdout, actualStderr := executeWithSdm()
+	actualStdout, actualStderr := sdmImpl.execute()
 
 	expectedStdout := new(strings.Builder)
 	expectedStdout.Write(getFilledStdout())
@@ -37,13 +33,9 @@ func (tests executeWithSdmTests) testWhenSdmCommandIsSuccessful(t *testing.T) {
 }
 
 func (tests executeWithSdmTests) testWhenSdmCommandFails(t *testing.T) {
-	runCommandBackup := runCommand
-	runCommand = runFailedCommandMock
-	defer func() {
-		runCommand = runCommandBackup
-	}()
+	sdmImpl := NewSdmMock(runFailedCommandMock)
 
-	actualStdout, actualStderr := executeWithSdm()
+	actualStdout, actualStderr := sdmImpl.execute()
 
 	expectedStdout := new(strings.Builder)
 	expectedStdout.Write(getEmptyStdout())

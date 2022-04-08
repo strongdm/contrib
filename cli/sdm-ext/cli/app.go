@@ -2,9 +2,6 @@ package cli
 
 import (
 	"fmt"
-	"os"
-	"os/exec"
-	"strings"
 
 	"github.com/urfave/cli"
 )
@@ -28,30 +25,9 @@ func NewApp() *cli.App {
 	return app
 }
 
-func executeWithSdm() (*strings.Builder, *strings.Builder) {
-	stdout := new(strings.Builder)
-	stderr := new(strings.Builder)
-
-	args := os.Args[1:]
-	cmd := exec.Command("sdm", args...)
-
-	cmd.Stdout = stdout
-	cmd.Stderr = stderr
-
-	runCommand(cmd)
-
-	return stdout, stderr
-}
-
-var runCommand = func(cmd *exec.Cmd) {
-	err := cmd.Run()
-	if err != nil {
-		fmt.Println(err)
-	}
-}
-
-var commandNotFound = func(ctx *cli.Context, command string) {
-	stdout, stderr := executeWithSdm()
+func commandNotFound(ctx *cli.Context, command string) {
+	sdmImpl := NewSdm()
+	stdout, stderr := sdmImpl.execute()
 	fmt.Print(stdout.String())
 	fmt.Print(stderr.String())
 }

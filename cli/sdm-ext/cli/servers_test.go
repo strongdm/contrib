@@ -1,8 +1,6 @@
 package cli
 
 import (
-	"ext/adapter"
-	"ext/util"
 	"testing"
 
 	"github.com/stretchr/testify/assert"
@@ -28,265 +26,93 @@ func TestAdminServersAddAction(t *testing.T) {
 type adminServersAddActionTests struct{}
 
 func (tests adminServersAddActionTests) testWhenThePassedCommandIsValid(t *testing.T) {
-	getArgsBackup := getArgs
-	getArgs = getArgsMock
-	defer func() {
-		getArgs = getArgsBackup
-	}()
+	sdmExtImpl := NewSdmExt()
 
-	convertStrSliceToStrBackup := util.ConvertStrSliceToStr
-	util.ConvertStrSliceToStr = convertStrSliceToStrMock
-	defer func() {
-		util.ConvertStrSliceToStr = convertStrSliceToStrBackup
-	}()
+	sdmExtImpl.patchGetArgs(getArgsMock)
+	sdmExtImpl.patchConvertStrSliceToStr(convertStrSliceToStrMock)
+	sdmExtImpl.patchCheckRegexMatch(checkRegexMatchWhenMatchesMock)
+	sdmExtImpl.patchMapCommandArguments(mapCommandArgumentsMock)
+	sdmExtImpl.patchServers(serversMock)
 
-	checkRegexMatchBackup := util.CheckRegexMatch
-	util.CheckRegexMatch = checkRegexMatchWhenMatchesMock
-	defer func() {
-		util.CheckRegexMatch = checkRegexMatchBackup
-	}()
-
-	mapCommandArgumentsBackup := util.MapCommandArguments
-	util.MapCommandArguments = mapCommandArgumentsMock
-	defer func() {
-		util.MapCommandArguments = mapCommandArgumentsBackup
-	}()
-
-	serversBackup := adapter.Servers
-	adapter.Servers = serversMock
-	defer func() {
-		adapter.Servers = serversBackup
-	}()
-
-	actualErr := adminServersAddAction(&cli.Context{})
+	actualErr := sdmExtImpl.adminServersAddAction(&cli.Context{})
 
 	assert.Nil(t, actualErr)
 }
 
 func (tests adminServersAddActionTests) testWhenThereIsNoArguments(t *testing.T) {
-	getArgsBackup := getArgs
-	getArgs = getEmptyArgsMock
-	defer func() {
-		getArgs = getArgsBackup
-	}()
+	sdmExtImpl := NewSdmExt()
 
-	convertStrSliceToStrBackup := util.ConvertStrSliceToStr
-	util.ConvertStrSliceToStr = convertStrSliceToStrMock
-	defer func() {
-		util.ConvertStrSliceToStr = convertStrSliceToStrBackup
-	}()
+	sdmExtImpl.patchGetArgs(getEmptyArgsMock)
+	sdmExtImpl.patchConvertStrSliceToStr(convertStrSliceToStrMock)
+	sdmExtImpl.patchCheckRegexMatch(checkRegexMatchWhenMatchesMock)
+	sdmExtImpl.patchMapCommandArguments(mapCommandArgumentsMock)
+	sdmExtImpl.patchServers(serversMock)
 
-	checkRegexMatchBackup := util.CheckRegexMatch
-	util.CheckRegexMatch = checkRegexMatchWhenMatchesMock
-	defer func() {
-		util.CheckRegexMatch = checkRegexMatchBackup
-	}()
-
-	mapCommandArgumentsBackup := util.MapCommandArguments
-	util.MapCommandArguments = mapCommandArgumentsMock
-	defer func() {
-		util.MapCommandArguments = mapCommandArgumentsBackup
-	}()
-
-	serversBackup := adapter.Servers
-	adapter.Servers = serversMock
-	defer func() {
-		adapter.Servers = serversBackup
-	}()
-
-	actualErr := adminServersAddAction(&cli.Context{})
+	actualErr := sdmExtImpl.adminServersAddAction(&cli.Context{})
 
 	assert.Nil(t, actualErr)
 }
 
 func (tests adminServersAddActionTests) testWhenThePassedFlagDoesNotExistInSdmExtCli(t *testing.T) {
-	getArgsBackup := getArgs
-	getArgs = getArgsWithWrongFlagMock
-	defer func() {
-		getArgs = getArgsBackup
-	}()
+	sdmExtImpl := NewSdmExt()
 
-	convertStrSliceToStrBackup := util.ConvertStrSliceToStr
-	util.ConvertStrSliceToStr = convertStrSliceToStrWithWrongFlagMock
-	defer func() {
-		util.ConvertStrSliceToStr = convertStrSliceToStrBackup
-	}()
+	sdmExtImpl.patchGetArgs(getArgsWithWrongFlagMock)
+	sdmExtImpl.patchConvertStrSliceToStr(convertStrSliceToStrWithWrongFlagMock)
+	sdmExtImpl.patchCheckRegexMatch(checkRegexMatchWhenDoesNotMatchesMock)
+	sdmExtImpl.patchGetSdmCommand(getSdmCommandMock)
+	sdmExtImpl.patchGetAppName(getAppNameMock)
+	sdmExtImpl.patchGetCommandName(getCommandNameMock)
+	sdmExtImpl.patchCommandNotFound(commandNotFoundMock)
 
-	checkRegexMatchBackup := util.CheckRegexMatch
-	util.CheckRegexMatch = checkRegexMatchWhenDoesNotMatchesMock
-	defer func() {
-		util.CheckRegexMatch = checkRegexMatchBackup
-	}()
-
-	getSdmCommandBackup := getSdmCommand
-	getSdmCommand = getSdmCommandMock
-	defer func() {
-		getSdmCommand = getSdmCommandBackup
-	}()
-
-	getAppNameBackup := getAppName
-	getAppName = getAppNameMock
-	defer func() {
-		getAppName = getAppNameBackup
-	}()
-
-	getCommandNameBackup := getCommandName
-	getCommandName = getCommandNameMock
-	defer func() {
-		getCommandName = getCommandNameBackup
-	}()
-
-	commandNotFoundBackup := commandNotFound
-	commandNotFound = commandNotFoundMock
-	defer func() {
-		commandNotFound = commandNotFoundBackup
-	}()
-
-	actualErr := adminServersAddAction(&cli.Context{})
+	actualErr := sdmExtImpl.adminServersAddAction(&cli.Context{})
 
 	assert.Nil(t, actualErr)
 }
 
 func (tests adminServersAddActionTests) testWhenASubcommandIsPassedBetweenAddCommandAndFlag(t *testing.T) {
-	getArgsBackup := getArgs
-	getArgs = getArgsWithSubcommandBetweenCommandAndFlagMock
-	defer func() {
-		getArgs = getArgsBackup
-	}()
+	sdmExtImpl := NewSdmExt()
 
-	convertStrSliceToStrBackup := util.ConvertStrSliceToStr
-	util.ConvertStrSliceToStr = convertStrSliceToStrWithSubcommandBetweenCommandAndFlagMock
-	defer func() {
-		util.ConvertStrSliceToStr = convertStrSliceToStrBackup
-	}()
+	sdmExtImpl.patchGetArgs(getArgsWithSubcommandBetweenCommandAndFlagMock)
+	sdmExtImpl.patchConvertStrSliceToStr(convertStrSliceToStrWithSubcommandBetweenCommandAndFlagMock)
+	sdmExtImpl.patchCheckRegexMatch(checkRegexMatchWhenDoesNotMatchesMock)
+	sdmExtImpl.patchGetSdmCommand(getSdmCommandMock)
+	sdmExtImpl.patchGetAppName(getAppNameMock)
+	sdmExtImpl.patchGetCommandName(getCommandNameMock)
+	sdmExtImpl.patchCommandNotFound(commandNotFoundMock)
 
-	checkRegexMatchBackup := util.CheckRegexMatch
-	util.CheckRegexMatch = checkRegexMatchWhenDoesNotMatchesMock
-	defer func() {
-		util.CheckRegexMatch = checkRegexMatchBackup
-	}()
-
-	getSdmCommandBackup := getSdmCommand
-	getSdmCommand = getSdmCommandMock
-	defer func() {
-		getSdmCommand = getSdmCommandBackup
-	}()
-
-	getAppNameBackup := getAppName
-	getAppName = getAppNameMock
-	defer func() {
-		getAppName = getAppNameBackup
-	}()
-
-	getCommandNameBackup := getCommandName
-	getCommandName = getCommandNameMock
-	defer func() {
-		getCommandName = getCommandNameBackup
-	}()
-
-	commandNotFoundBackup := commandNotFound
-	commandNotFound = commandNotFoundMock
-	defer func() {
-		commandNotFound = commandNotFoundBackup
-	}()
-
-	actualErr := adminServersAddAction(&cli.Context{})
+	actualErr := sdmExtImpl.adminServersAddAction(&cli.Context{})
 
 	assert.Nil(t, actualErr)
 }
 
 func (tests adminServersAddActionTests) testWhenTheSubcommandIsPassedAfterFlagValue(t *testing.T) {
-	getArgsBackup := getArgs
-	getArgs = getArgsWithSubcommandAfterFlagValueMock
-	defer func() {
-		getArgs = getArgsBackup
-	}()
+	sdmExtImpl := NewSdmExt()
 
-	convertStrSliceToStrBackup := util.ConvertStrSliceToStr
-	util.ConvertStrSliceToStr = convertStrSliceToStrWithSubcommandAfterFlagValueMock
-	defer func() {
-		util.ConvertStrSliceToStr = convertStrSliceToStrBackup
-	}()
+	sdmExtImpl.patchGetArgs(getArgsWithSubcommandAfterFlagValueMock)
+	sdmExtImpl.patchConvertStrSliceToStr(convertStrSliceToStrWithSubcommandAfterFlagValueMock)
+	sdmExtImpl.patchCheckRegexMatch(checkRegexMatchWhenDoesNotMatchesMock)
+	sdmExtImpl.patchGetSdmCommand(getSdmCommandMock)
+	sdmExtImpl.patchGetAppName(getAppNameMock)
+	sdmExtImpl.patchGetCommandName(getCommandNameMock)
+	sdmExtImpl.patchCommandNotFound(commandNotFoundMock)
 
-	checkRegexMatchBackup := util.CheckRegexMatch
-	util.CheckRegexMatch = checkRegexMatchWhenDoesNotMatchesMock
-	defer func() {
-		util.CheckRegexMatch = checkRegexMatchBackup
-	}()
-
-	getSdmCommandBackup := getSdmCommand
-	getSdmCommand = getSdmCommandMock
-	defer func() {
-		getSdmCommand = getSdmCommandBackup
-	}()
-
-	getAppNameBackup := getAppName
-	getAppName = getAppNameMock
-	defer func() {
-		getAppName = getAppNameBackup
-	}()
-
-	getCommandNameBackup := getCommandName
-	getCommandName = getCommandNameMock
-	defer func() {
-		getCommandName = getCommandNameBackup
-	}()
-
-	commandNotFoundBackup := commandNotFound
-	commandNotFound = commandNotFoundMock
-	defer func() {
-		commandNotFound = commandNotFoundBackup
-	}()
-
-	actualErr := adminServersAddAction(&cli.Context{})
+	actualErr := sdmExtImpl.adminServersAddAction(&cli.Context{})
 
 	assert.Nil(t, actualErr)
 }
 
 func (tests adminServersAddActionTests) testWhenTheSubcommandIsPassedAfterFlag(t *testing.T) {
-	getArgsBackup := getArgs
-	getArgs = getArgsWithSubcommandAfterFlagMock
-	defer func() {
-		getArgs = getArgsBackup
-	}()
+	sdmExtImpl := NewSdmExt()
 
-	convertStrSliceToStrBackup := util.ConvertStrSliceToStr
-	util.ConvertStrSliceToStr = convertStrSliceToStrWithSubcommandAfterFlagMock
-	defer func() {
-		util.ConvertStrSliceToStr = convertStrSliceToStrBackup
-	}()
+	sdmExtImpl.patchGetArgs(getArgsWithSubcommandAfterFlagMock)
+	sdmExtImpl.patchConvertStrSliceToStr(convertStrSliceToStrWithSubcommandAfterFlagMock)
+	sdmExtImpl.patchCheckRegexMatch(checkRegexMatchWhenDoesNotMatchesMock)
+	sdmExtImpl.patchGetSdmCommand(getSdmCommandMock)
+	sdmExtImpl.patchGetAppName(getAppNameMock)
+	sdmExtImpl.patchGetCommandName(getCommandNameMock)
+	sdmExtImpl.patchCommandNotFound(commandNotFoundMock)
 
-	checkRegexMatchBackup := util.CheckRegexMatch
-	util.CheckRegexMatch = checkRegexMatchWhenDoesNotMatchesMock
-	defer func() {
-		util.CheckRegexMatch = checkRegexMatchBackup
-	}()
-
-	getSdmCommandBackup := getSdmCommand
-	getSdmCommand = getSdmCommandMock
-	defer func() {
-		getSdmCommand = getSdmCommandBackup
-	}()
-
-	getAppNameBackup := getAppName
-	getAppName = getAppNameMock
-	defer func() {
-		getAppName = getAppNameBackup
-	}()
-
-	getCommandNameBackup := getCommandName
-	getCommandName = getCommandNameMock
-	defer func() {
-		getCommandName = getCommandNameBackup
-	}()
-
-	commandNotFoundBackup := commandNotFound
-	commandNotFound = commandNotFoundMock
-	defer func() {
-		commandNotFound = commandNotFoundBackup
-	}()
-
-	actualErr := adminServersAddAction(&cli.Context{})
+	actualErr := sdmExtImpl.adminServersAddAction(&cli.Context{})
 
 	assert.Nil(t, actualErr)
 }

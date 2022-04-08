@@ -1,54 +1,37 @@
 package service
 
 import (
-	"fmt"
-	"os/exec"
+	"ext/util"
 	"strings"
 )
 
-type AdminService struct{}
-
-func NewAdminService() *AdminService {
-	return &AdminService{}
+type adminService interface {
+	execute(commands string, options map[string]string, postOptions string) (strings.Builder, strings.Builder)
 }
 
-var execute = func(commands string, options map[string]string, postOptions string) (strings.Builder, strings.Builder) {
-	opts := append(optionsToArguments(options), postOptions)
-	commandsAndOptions := append(strings.Split(commands, " "), opts...)
-
-	stdout := new(strings.Builder)
-	stderr := new(strings.Builder)
-
-	cmd := exec.Command("sdm", commandsAndOptions...)
-
-	cmd.Stdout = stdout
-	cmd.Stderr = stderr
-
-	runCommand(cmd)
-
-	return *stdout, *stderr
+type AdminServiceImpl struct {
+	findFlag              func(flagList []string, optionsMap map[string]string) string
+	extractValuesFromJson func(file string) ([]map[string]interface{}, error)
+	execute               func(commands string, options map[string]string, postOptions string) (strings.Builder, strings.Builder)
 }
 
-var runCommand = func(cmd *exec.Cmd) {
-	err := cmd.Run()
-	if err != nil {
-		fmt.Println(err)
+func NewAdminService() *AdminServiceImpl {
+	sdmService := NewSdmService()
+	return &AdminServiceImpl{
+		util.FindFlag,
+		util.ExtractValuesFromJson,
+		sdmService.execute,
 	}
 }
 
-func optionsToArguments(options map[string]string) []string {
-	strOptions := []string{}
+func (s *AdminServiceImpl) patchFindFlag(findFlag func(flagList []string, optionsMap map[string]string) string) {
+	s.findFlag = findFlag
+}
 
-	for key, value := range options {
-		if key[len(key)-1:] == "=" {
-			key += value
-			value = ""
-		}
-		strOptions = append(strOptions, key)
-		if len(value) > 0 {
-			strOptions = append(strOptions, value)
-		}
-	}
+func (s *AdminServiceImpl) patchExtractValuesFromJson(extractValuesFromJson func(file string) ([]map[string]interface{}, error)) {
+	s.extractValuesFromJson = extractValuesFromJson
+}
 
-	return strOptions
+func (s *AdminServiceImpl) patchExecute(execute func(commands string, options map[string]string, postOptions string) (strings.Builder, strings.Builder)) {
+	s.execute = execute
 }

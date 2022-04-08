@@ -2,7 +2,6 @@ package service
 
 import (
 	"errors"
-	"ext/util"
 	"strings"
 	"testing"
 
@@ -26,82 +25,48 @@ func TestAdminServersAdd(t *testing.T) {
 type adminServersAddTests struct{}
 
 func (tests adminServersAddTests) testWhenItIsSucessful(t *testing.T) {
-	findFlagBackup := util.FindFlag
-	util.FindFlag = findFlagMock
-	defer func() {
-		util.FindFlag = findFlagBackup
-	}()
-
-	extractValuesFromJsonBackup := util.ExtractValuesFromJson
-	util.ExtractValuesFromJson = extractValuesFromJsonMock
-	defer func() {
-		util.ExtractValuesFromJson = extractValuesFromJsonBackup
-	}()
-
-	executeBackup := execute
-	execute = executeWithSuccessMock
-	defer func() {
-		execute = executeBackup
-	}()
+	adminServiceImpl := NewAdminService()
+	adminServiceImpl.patchFindFlag(findFlagMock)
+	adminServiceImpl.patchExtractValuesFromJson(extractValuesFromJsonMock)
+	adminServiceImpl.patchExecute(executeWithSuccessMock)
 
 	options := map[string]string{"--file": "file.json"}
-	service := NewAdminService()
-	actualErr := service.AdminServersAdd(options)
+	actualErr := adminServiceImpl.AdminServersAdd(options)
 
 	assert.Nil(t, actualErr)
 }
 
 func (tests adminServersAddTests) testWhenFindFlagReturnsEmpty(t *testing.T) {
-	findFlagBackup := util.FindFlag
-	util.FindFlag = findFlagReturningEmptyMock
-	defer func() {
-		util.FindFlag = findFlagBackup
-	}()
+	adminServiceImpl := NewAdminService()
+	adminServiceImpl.patchFindFlag(findFlagReturningEmptyMock)
 
 	options := map[string]string{"--files": "file.json"}
-	service := NewAdminService()
-	actualErr := service.AdminServersAdd(options)
+	actualErr := adminServiceImpl.AdminServersAdd(options)
 
 	assert.Nil(t, actualErr)
 }
 
 func (tests adminServersAddTests) testWhenAnNonexistentFileIsPassed(t *testing.T) {
-	findFlagBackup := util.FindFlag
-	util.FindFlag = findFlagMock
-	defer func() {
-		util.FindFlag = findFlagBackup
-	}()
-
-	extractValuesFromJsonBackup := util.ExtractValuesFromJson
-	util.ExtractValuesFromJson = extractValuesFromJsonWithABaddlyFormattedJsonMock
-	defer func() {
-		util.ExtractValuesFromJson = extractValuesFromJsonBackup
-	}()
+	adminServiceImpl := NewAdminService()
+	adminServiceImpl.patchFindFlag(findFlagMock)
+	adminServiceImpl.patchExtractValuesFromJson(extractValuesFromJsonWithABaddlyFormattedJsonMock)
 
 	options := map[string]string{"--file": "file.json"}
-	service := NewAdminService()
-	actualErr := service.AdminServersAdd(options)
+
+	actualErr := adminServiceImpl.AdminServersAdd(options)
 
 	expectedErr := errors.New("invalid character '}' looking for beginning of object key string")
 
 	assert.Equal(t, expectedErr.Error(), actualErr.Error())
 }
-func (tests adminServersAddTests) testWhenAnExistentFileWithAWrongContentIsPassed(t *testing.T) {
-	findFlagBackup := util.FindFlag
-	util.FindFlag = findFlagMock
-	defer func() {
-		util.FindFlag = findFlagBackup
-	}()
 
-	extractValuesFromJsonBackup := util.ExtractValuesFromJson
-	util.ExtractValuesFromJson = extractValuesFromJsonWithANonExistentJsonFileMock
-	defer func() {
-		util.ExtractValuesFromJson = extractValuesFromJsonBackup
-	}()
+func (tests adminServersAddTests) testWhenAnExistentFileWithAWrongContentIsPassed(t *testing.T) {
+	adminServiceImpl := NewAdminService()
+	adminServiceImpl.patchFindFlag(findFlagMock)
+	adminServiceImpl.patchExtractValuesFromJson(extractValuesFromJsonWithANonExistentJsonFileMock)
 
 	options := map[string]string{"--file": "file.json"}
-	service := NewAdminService()
-	actualErr := service.AdminServersAdd(options)
+	actualErr := adminServiceImpl.AdminServersAdd(options)
 
 	expectedErr := errors.New("open file.json: no such file or directory")
 
@@ -109,27 +74,13 @@ func (tests adminServersAddTests) testWhenAnExistentFileWithAWrongContentIsPasse
 }
 
 func (tests adminServersAddTests) testWhenOneOfTheServersIsNotRegistered(t *testing.T) {
-	findFlagBackup := util.FindFlag
-	util.FindFlag = findFlagMock
-	defer func() {
-		util.FindFlag = findFlagBackup
-	}()
-
-	extractValuesFromJsonBackup := util.ExtractValuesFromJson
-	util.ExtractValuesFromJson = extractValuesFromJsonMock
-	defer func() {
-		util.ExtractValuesFromJson = extractValuesFromJsonBackup
-	}()
-
-	executeBackup := execute
-	execute = executeWithoutSuccessMock
-	defer func() {
-		execute = executeBackup
-	}()
+	adminServiceImpl := NewAdminService()
+	adminServiceImpl.patchFindFlag(findFlagMock)
+	adminServiceImpl.patchExtractValuesFromJson(extractValuesFromJsonMock)
+	adminServiceImpl.patchExecute(executeWithoutSuccessMock)
 
 	options := map[string]string{"--file": "file.json"}
-	service := NewAdminService()
-	actualErr := service.AdminServersAdd(options)
+	actualErr := adminServiceImpl.AdminServersAdd(options)
 
 	assert.Nil(t, actualErr)
 }
