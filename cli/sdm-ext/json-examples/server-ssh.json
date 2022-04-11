@@ -1,0 +1,14 @@
+{
+    "allowDeprecatedKeyExchanges": "",
+    "hostname": "192.168.101.192",
+    "name": "Example SSH",
+    "port": "22",
+    "portForwarding": "",
+    "publicKey": "",
+    "type": "ssh",
+    "username": "username-example",
+    "tags": {
+        "key1": "value1",
+        "key2": "value2"
+    }
+}
