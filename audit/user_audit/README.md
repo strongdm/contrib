@@ -1,6 +1,6 @@
 # List all Users with Roles and Resources
 
-This folder contains a Python script that lists all users, with their Role(s) and all resources granted by those Roles.
+This folder contains a Python script that lists all users, with their Role(s) and all resources granted by those Roles. It works with the legacy strongDM UI, and under the new Access Overhaul system.
 
 ## Requirements
 * Python3

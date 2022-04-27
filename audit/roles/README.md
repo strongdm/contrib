@@ -1,6 +1,6 @@
 # List all Roles and associated Resources
 
-This folder contains a Python script that lists all Roles and the Resources linked to each.
+This folder contains a Python script that lists all Roles and the Resources linked to each. It works with the legacy strongDM UI, and under the new Access Overhaul system.
 
 ## Requirements
 * Python3
