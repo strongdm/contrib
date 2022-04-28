@@ -52,3 +52,4 @@ operations/variable-scripts/variable.json
 package.json
 .vscode/settings.json
 *tfstate*
+audit.csv
