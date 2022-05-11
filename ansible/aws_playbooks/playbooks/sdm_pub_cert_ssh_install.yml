@@ -63,7 +63,7 @@
       args:
         executable: /bin/bash
     - name: Get SDM Gateway Token And Install
-      shell: ./sdm admin servers add sshCert --hostname `curl http://169.254.169.254/latestmeta-data/local-ipv4` --username $USER --port 22
+      shell: ./sdm admin servers add sshCert --hostname `curl http://169.254.169.254/latest/meta-data/local-ipv4` --username $USER --port 22
       args:
         executable: /bin/bash
     - name: Unset SDM_ADMIN_TOKEN
