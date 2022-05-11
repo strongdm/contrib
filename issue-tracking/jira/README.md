@@ -42,3 +42,9 @@ After that, to create and run a container with the application, run:
 ```
 docker-compose up --build
 ```
+
+## Demo video
+
+Here is a video show how to setup and use the tool.
+
+https://user-images.githubusercontent.com/82273420/167864566-997049d9-7e24-4d0f-9c6c-7a8e4a0dc841.mp4
