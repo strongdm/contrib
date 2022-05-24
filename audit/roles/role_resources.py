@@ -1,5 +1,6 @@
 import json
 import os
+import csv
 import strongdm
 
 access_key=os.getenv("SDM_API_ACCESS_KEY")
@@ -75,13 +76,27 @@ def remove_none_values(elements):
 def print_border():
   print("~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=~=")
 
+def write_to_csv(roles):
+    header = ['Role Name', 'Resources->']
+    with open('role_resources.csv', 'w', encoding='UTF8') as f:
+        # Write header to csv
+        writer = csv.writer(f)
+        writer.writerow(header)
+        # Write a row for each Role, with columns for each resource
+        # (opposite may serve better?)
+        for role in roles:
+            # Get resources that are accessible from a given role name
+            resources = get_all_resources_by_role(role.name)
+            row = [role.name] + [r.name for r in resources]
+            writer.writerow(row)
+        f.close()
+
 def main():
   roles = get_all_roles()
-  for role in roles:
-      print("Role name: \"" + role.name + "\" includes the following resources:")
-      resources = get_all_resources_by_role(role.name)
-      print("  ", [r.name for r in resources])
-      print_border()
+  print("Creating CSV")
+  write_to_csv(roles)
+  print("Finished Writing CSV")
+  exit()
 
 if __name__ == "__main__":
     main()
