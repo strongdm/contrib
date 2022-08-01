@@ -1,0 +1,10 @@
+# StrongDM Logins within past 90 days
+
+This script is intended to ouput a CSV that shows the last login times for active StrongDM accounts, both human and service accounts. 
+
+For each account, either the last login time will be supplied, or a message that no logins during the last 90 days were detected. 
+
+Prerequisites
+* Python 3 
+* StrongDM client installed
+* Logged into the strongDM client
