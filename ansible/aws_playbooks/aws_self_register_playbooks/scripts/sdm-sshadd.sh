@@ -8,5 +8,4 @@
    -p `curl http://169.254.169.254/latest/meta-data/instance-id` \
    $USERNAME@`curl http://169.254.169.254/latest/meta-data/public-hostname` \
    | tee -a "/home/$USERNAME/.ssh/authorized_keys"
- ./sdm admin roles grant `curl http://169.254.169.254/latest/meta-data/instance-id` {{ SDM_Role }}
  rm sdm.zip
