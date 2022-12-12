@@ -5,8 +5,9 @@ This process doesn't affect any other tags you might use.
 
 #### Requirements:
 - [SDM API keys](https://www.strongdm.com/docs/admin-ui-guide/settings/admin-tokens/api-keys) defined in runtime environment
+- The API keys should have `Datasources & Servers:List` and `Datasources & Servers:Update` permissions
 - Python 3
-- strongDM Python module
+- StrongDM Python package
 
 #### Notes:
 - This script can take some time to run if you have many unhealthy resources.
